@@ -1,3 +1,9 @@
+// Import Firebase functions
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDvPjN4aeHU2H0UtHfOHWdLy4clx5uGR-k",
@@ -10,15 +16,15 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase services
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const storage = firebase.storage();
-const db = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
 // Function to handle Google Authentication
 function authenticateUser() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
         .then((result) => {
             const user = result.user;
             console.log('User signed in:', user);
@@ -28,6 +34,7 @@ function authenticateUser() {
             console.error('Authentication error:', error);
         });
 }
+
 // Run after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const getStartedBtn = document.getElementById('get-started-btn');
