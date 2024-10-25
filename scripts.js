@@ -23,13 +23,17 @@ const db = getFirestore(app);
 
 // Google Auth Provider
 const provider = new GoogleAuthProvider();
+
 document.addEventListener('DOMContentLoaded', () => {
     const getStartedBtn = document.getElementById('get-started-btn');
     const signUpBtn = document.getElementById('sign-up-btn');
+    const productSection = document.querySelector('.product-section');
+    const productCards = document.querySelectorAll('.product-card');
+    const sectionTop = productSection.offsetTop;
 
     // Function to trigger Google Authentication
-    function authenticateUser() { // Google provider
-        auth.signInWithPopup(provider)
+    function authenticateUser() {
+        signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;
                 console.log('User signed in:', user);
@@ -44,13 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listeners to both buttons
     getStartedBtn.addEventListener('click', authenticateUser);
     signUpBtn.addEventListener('click', authenticateUser);
-});
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const productSection = document.querySelector('.product-section');
-    const productCards = document.querySelectorAll('.product-card');
-    const sectionTop = productSection.offsetTop;
 
     // Function to handle stacking and unstacking of cards based on scroll position
     function handleScroll() {
