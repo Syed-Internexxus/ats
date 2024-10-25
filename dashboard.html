@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <a href="https://internexxus.com">
+                <img width="220" height="42" src="assets/logo.jpg" alt="Logo">
+            </a>
+        </div>
+        <ul>
+            <li><a href="https://cover-letter-generator.internexxus.com/">Cover Letter Generator</a></li>
+            <li><a href="https://internexxus.com/internships/?filter-orderby=newest&jobs_ppp=12">Explore Internships</a></li>
+        </ul>
+        <a href="#" class="sign-up-btn">Sign Up</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="cover-letter.jpg" alt="Cover Letter Image">
+            <div class="hero-text">
+                <h1>Create a professional cover letter in minutes.</h1>
+                <div class="progress-bar" id="progress-bar">
+                    <div class="step active" id="step1">
+                        <div class="circle">1</div>
+                        <div class="label">Upload Resume</div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="circle">2</div>
+                        <div class="label">Add Job Description</div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="circle">3</div>
+                        <div class="label">Generate Cover Letter</div>
+                    </div>
+                </div>
+                <div class="upload-box" id="upload-box">
+                    <p>Drag and Drop your PDF Resume here or Click to Select</p>
+                    <input type="file" id="resume-upload" accept=".pdf" style="display: none;">
+                    <button class="upload-button" id="upload-button">Select File</button>
+                </div>
+                <p>Our AI-powered cover letter generator helps you craft personalized cover letters to make a great first impression.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookies Policy</a>
+    </footer>
+</body>
+</html>
