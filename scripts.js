@@ -1,25 +1,34 @@
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, uploadString } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+// Your Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDvPjN4aeHU2H0UtHfOHWdLy4clx5uGR-k",
-    authDomain: "internexxus-products-65a8b.firebaseapp.com",
-    projectId: "internexxus-products-65a8b",
-    storageBucket: "internexxus-products-65a8b.appspot.com",
-    messagingSenderId: "788630683314",
-    appId: "1:788630683314:web:ff6a2da1fdfee098e713ab",
-    measurementId: "G-B0JLMBTZWZ"
-  };
+  apiKey: "AIzaSyDvPjN4aeHU2H0UtHfOHWdLy4clx5uGR-k",
+  authDomain: "internexxus-products-65a8b.firebaseapp.com",
+  projectId: "internexxus-products-65a8b",
+  storageBucket: "internexxus-products-65a8b.appspot.com",
+  messagingSenderId: "788630683314",
+  appId: "1:788630683314:web:ff6a2da1fdfee098e713ab",
+  measurementId: "G-B0JLMBTZWZ"
+};
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();  // Initialize Firebase Authentication
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
+// Google Auth Provider
+const provider = new GoogleAuthProvider();
 document.addEventListener('DOMContentLoaded', () => {
     const getStartedBtn = document.getElementById('get-started-btn');
     const signUpBtn = document.getElementById('sign-up-btn');
 
     // Function to trigger Google Authentication
-    function authenticateUser() {
-        const provider = new firebase.auth.GoogleAuthProvider();  // Google provider
+    function authenticateUser() { // Google provider
         auth.signInWithPopup(provider)
             .then((result) => {
                 const user = result.user;
