@@ -99,8 +99,7 @@ nav ul li a:hover::after {
 }
 
 .hero-content {
-  width: 90%;
-  max-width: 800px;
+  width: 100dvw;
   background-color: #ffffff;
   padding: 2rem;
   border-radius: 8px;
@@ -438,8 +437,7 @@ nav ul li a:hover::after {
 }
 
 .ats-image img {
-  max-width: 85%;
-  height: auto;
+  width: 60%;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -554,7 +552,7 @@ footer {
   gap: 1rem;
   padding: 1rem;
   background-color: #f8f8f8;
-}
+} 
 
 footer a {
   text-decoration: none;
