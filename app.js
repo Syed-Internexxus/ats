@@ -199,6 +199,27 @@ document.addEventListener('DOMContentLoaded', () => {
         handleFileUpload(file);
     });
 
+    // Function to handle card stacking based on scroll position
+    function handleScroll() {
+        const scrollPosition = window.scrollY;
+        const scrollIntoSection = scrollPosition - sectionTop;
+
+        if (scrollPosition >= sectionTop && scrollPosition < (sectionTop + productSection.offsetHeight)) {
+            productCards.forEach((card, index) => {
+                const stackPoint = 180 * index;
+                if (scrollIntoSection > stackPoint && index < 3) {
+                    card.style.position = 'sticky';
+                    card.style.top = '0';
+                    card.style.transform = `translateY(0) rotate(${index % 2 === 0 ? -2 : 2}deg)`;
+                } else if (scrollIntoSection <= stackPoint) {
+                    card.style.position = 'absolute';
+                    card.style.top = `${180 * index}px`;
+                    card.style.transform = `rotate(${index % 2 === 0 ? -2 : 2}deg)`;
+                }
+            });
+        }
+    }
+
     // Throttled scroll event listener
     function throttle(func, limit) {
         let inThrottle;
