@@ -209,8 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 hideLoader();
-                console.error("Error:", error);
-                alert("An error occurred while rebuilding the resume.");
             }
         });
     }
