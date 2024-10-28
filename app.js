@@ -128,10 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 hideLoader(); // Hide the loader once response is received
 
-                // Display analysis results
+                // Hide progress bar and steps
+                progressBar.style.display = 'none';
+                steps.forEach(step => step.style.display = 'none');
+
+                // Display analysis results and expand hero section
                 document.getElementById('upload-box').style.display = 'none';
                 document.getElementById('results-section').style.display = 'flex';
-                document.querySelector('.hero').classList.add('full-width');
+                document.querySelector('.hero').classList.add('full-width'); // Add class to make hero section full width
 
                 document.getElementById('result-content').innerHTML = `
                     <h3>Compatibility Score: ${bodyData.score}%</h3>
@@ -150,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("An error occurred while analyzing the resume.");
         }
     }
+
 
     // Rebuild button functionality
     if (rebuildButton) {

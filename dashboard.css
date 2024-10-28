@@ -91,9 +91,11 @@ nav ul li a:hover::after {
 }
 
 .hero.full-width {
-  width: 100%;
+  width: 100dvw;
   max-width: none;
   padding: 2rem;
+  margin: 0;
+  text-align: center;
 }
 
 .hero-content {
