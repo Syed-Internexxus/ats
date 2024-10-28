@@ -546,6 +546,12 @@
   background-color: #218838;
 }
 
+.hero.full-width {
+  width: 100%;
+  max-width: none;
+  padding: 2rem;
+}
+
 /* Resume Display Styling */
 .resume-display h2 {
   font-size: 1.5rem;
@@ -553,9 +559,10 @@
   margin-bottom: 1rem;
 }
 
+/* Adjust resume display size */
 #resume-embed {
   width: 100%;
-  height: 500px;
+  height: 700px; /* Increased height for better visibility */
   border: none;
   border-radius: 5px;
 }

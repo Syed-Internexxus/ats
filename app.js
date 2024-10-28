@@ -101,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                cors: 'no-cors',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -112,9 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const apiResponse = await response.json();
                 const bodyData = JSON.parse(apiResponse.body); // Parse the body field for the score and points
     
-                // Hide the upload section and show the results section
+                // Hide the upload section, show the results section, and apply full-width to hero
                 document.getElementById('upload-box').style.display = 'none';
                 document.getElementById('results-section').style.display = 'flex';
+                document.querySelector('.hero').classList.add('full-width');
     
                 // Populate the analysis results
                 document.getElementById('result-content').innerHTML = `
@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("An error occurred while analyzing the resume.");
         }
     }
+    
     
     // Rebuild button functionality
     document.getElementById('rebuild-button').addEventListener('click', () => {
