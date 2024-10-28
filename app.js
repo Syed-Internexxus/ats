@@ -89,52 +89,64 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Function to send resume analysis request
-    async function analyzeResume(jobDescription) {
-        const url = "https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer";
-        const payload = {
-            base64_file: base64File,
-            job_description: jobDescription
-        };
-    
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-    
-            if (response.ok) {
-                const apiResponse = await response.json();
-                const bodyData = JSON.parse(apiResponse.body); // Parse the body field for the score and points
-    
-                // Hide the upload section, show the results section, and apply full-width to hero
-                document.getElementById('upload-box').style.display = 'none';
-                document.getElementById('results-section').style.display = 'flex';
-                document.querySelector('.hero').classList.add('full-width');
-    
-                // Populate the analysis results
-                document.getElementById('result-content').innerHTML = `
-                    <h3>Compatibility Score: ${bodyData.score}%</h3>
-                    <ul id="points-list">
-                        ${bodyData.points.map(point => `<li>${point}</li>`).join('')}
-                    </ul>
-                `;
-    
-                // Display the uploaded resume in the embed viewer
-                document.getElementById('resume-embed').src = URL.createObjectURL(resumeUploadInput.files[0]);
-            } else {
-                console.error("Failed to analyze resume:", response.statusText);
-                alert("Failed to analyze resume. Please try again.");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("An error occurred while analyzing the resume.");
-        }
-    }
+    // Show loader
+function showLoader() {
+    document.getElementById('loader').style.display = 'flex';
+  }
+  
+  // Hide loader
+  function hideLoader() {
+    document.getElementById('loader').style.display = 'none';
+  }
+  
+  // Example usage in analyzeResume function
+  async function analyzeResume(jobDescription) {
+      showLoader(); // Show loader before sending request
+  
+      const url = "https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer";
+      const payload = {
+          base64_file: base64File,
+          job_description: jobDescription
+      };
+  
+      try {
+          const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+          });
+  
+          if (response.ok) {
+              const apiResponse = await response.json();
+              const bodyData = JSON.parse(apiResponse.body);
+  
+              // Hide the loader once response is received
+              hideLoader();
+  
+              // Rest of the code to display analysis results
+              document.getElementById('upload-box').style.display = 'none';
+              document.getElementById('results-section').style.display = 'flex';
+              document.querySelector('.hero').classList.add('full-width');
+  
+              document.getElementById('result-content').innerHTML = `
+                  <h3>Compatibility Score: ${bodyData.score}%</h3>
+                  <ul id="points-list">
+                      ${bodyData.points.map(point => `<li>${point}</li>`).join('')}
+                  </ul>
+              `;
+              document.getElementById('resume-embed').src = URL.createObjectURL(resumeUploadInput.files[0]);
+          } else {
+              hideLoader();
+              alert("Failed to analyze resume. Please try again.");
+          }
+      } catch (error) {
+          hideLoader();
+          alert("An error occurred while analyzing the resume.");
+      }
+  }
+  
     
     
     // Rebuild button functionality
