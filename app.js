@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    // Show loader
+// Show loader
 function showLoader() {
     document.getElementById('loader').style.display = 'flex';
   }
@@ -146,9 +146,7 @@ function showLoader() {
           alert("An error occurred while analyzing the resume.");
       }
   }
-  
-    
-    
+        
     // Rebuild button functionality
     document.getElementById('rebuild-button').addEventListener('click', () => {
         alert("Rebuild functionality coming soon!");
