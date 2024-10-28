@@ -15,13 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStep = 1;
     let base64File = ""; // Variable to hold base64 string of the uploaded file
 
-
-    function signout() {
-        logout.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        })
-
-    }
+    logout.addEventListener('click', () => {
+        window.location.href = '/index.html';
+    })
     // Function to handle card stacking based on scroll position
     function handleScroll() {
         const scrollPosition = window.scrollY;
