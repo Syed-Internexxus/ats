@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productSection = document.querySelector('.product-section');
     const productCards = document.querySelectorAll('.product-card');
     const sectionTop = productSection ? productSection.offsetTop : null;
-
+    const logout = document.getElementById('sign-out-btn');
     // Variables for the Hero Section
     const uploadBox = document.getElementById('upload-box');
     const uploadButton = document.getElementById('upload-button');
@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStep = 1;
     let base64File = ""; // Variable to hold base64 string of the uploaded file
 
+
+    function signout() {
+        logout.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        })
+
+    }
     // Function to handle card stacking based on scroll position
     function handleScroll() {
         const scrollPosition = window.scrollY;
@@ -203,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('rebuild-button-container').appendChild(manualDownloadText);
                 } else {
                     hideLoader();
-                    alert("Failed to rebuild resume. Please try again.");
                 }
             } catch (error) {
                 hideLoader();
