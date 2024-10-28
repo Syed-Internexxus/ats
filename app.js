@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Display analysis results and expand hero section
                 document.getElementById('upload-box').style.display = 'none';
                 document.getElementById('results-section').style.display = 'flex';
-                document.querySelector('.hero').classList.add('full-width'); // Add class to make hero section full width
+                document.querySelector('.hero-content').classList.add('full-width'); // Add class to make hero section full width
 
                 document.getElementById('result-content').innerHTML = `
                     <h3>Compatibility Score: ${bodyData.score}%</h3>
