@@ -8,16 +8,24 @@
 body {
   font-family: Poppins, sans-serif;
   line-height: 1.6;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Universal container class for consistent layout */
+.container {
+  max-width: 1200px; /* Set max-width as needed */
+  margin: 0 auto; /* Center align */
+  padding: 0 1rem; /* Small padding for edges */
 }
 
 /* Navigation Bar */
 nav {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Ensures vertical alignment */
+  align-items: center;
   padding: 1rem 2rem;
   background-color: #ace4ed;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds subtle shadow for depth */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   top: 0;
 }
 
@@ -25,7 +33,7 @@ nav ul {
   list-style: none;
   display: flex;
   gap: 2rem;
-  margin: 0; /* Reset default ul margin */
+  margin: 0;
 }
 
 nav a {
@@ -44,63 +52,51 @@ nav a::after {
   background: black;
   transition: width 0.3s ease;
   position: absolute;
-  bottom: -5px; /* Positioned just below the text */
+  bottom: -5px;
   left: 0;
 }
 
-nav ul li a::after {
-  content: '';
-  display: block;
-  width: 0;
-  height: 2px;
-  background: black;
-  transition: width 0.3s ease;
-  position: absolute;
-  bottom: -5px; /* Positioned just below the text */
-  left: 0;
-}
-
-/* Hover effect: underline expands */
 nav ul li a:hover::after {
   width: 100%;
 }
+
 .sign-up-btn {
   background-color: black;
   color: white;
-  padding: 0.8rem 1.5rem; /* Increased padding for better touch area */
-  border-radius: 50px; /* Fully rounded button for a modern look */
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
   font-weight: bold;
   transition: background-color 0.3s ease, color 0.3s ease;
-  text-transform: uppercase; /* Capitalize text for emphasis */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Button shadow for depth */
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .sign-up-btn:hover {
   background-color: white;
   color: black;
-  border: 1px solid black; /* Border appears on hover */
+  border: 1px solid black;
   transition: all 0.3s ease-in-out;
 }
 
 /* Responsive Navigation */
 @media (max-width: 768px) {
   nav {
-    flex-direction: column; /* Stack navigation on smaller screens */
+    flex-direction: column;
     align-items: flex-start;
   }
 
   nav ul {
     flex-direction: column;
-    gap: 1rem; /* Reduced gap for smaller screens */
+    gap: 1rem;
     margin-top: 1rem;
   }
 
   .sign-up-btn {
-    margin-top: 1rem; /* Space between the nav links and the button */
+    margin-top: 1rem;
   }
 }
 
-
+/* Hero Section */
 .hero {
   text-align: center;
   padding: 3rem 2rem;
@@ -114,35 +110,32 @@ nav ul li a:hover::after {
 .cta-btn {
   background-color: black;
   color: white;
-  margin-top  : 20px;
-  padding: 1rem 2.5rem; /* Increased padding for better touch area */
-  border-radius: 50px; /* Fully rounded button for a modern look */
+  margin-top: 20px;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
   font-weight: bold;
   transition: background-color 0.3s ease, color 0.3s ease;
-  text-transform: uppercase; /* Capitalize text for emphasis */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Button shadow for depth */
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cta-btn:hover {
   background-color: white;
   color: black;
-  border: 1px solid black; /* Border appears on hover */
+  border: 1px solid black;
   transition: all 0.3s ease-in-out;
 }
 
 /* Product section styling */
 .product-section {
-  padding: 2rem; /* Adjusted space before the next section */
+  padding: 2rem;
 }
 
 .product-content {
   display: flex;
   gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
-/* Left side: Description */
 .product-description {
   flex: 0 0 50%;
   padding-right: 2rem;
@@ -158,11 +151,10 @@ nav ul li a:hover::after {
   line-height: 1.6;
 }
 
-/* Right side: Product Cards */
 .product-cards {
   position: relative;
   flex: 1;
-  height: 600px; /* Increased height to accommodate thicker cards */
+  height: 600px;
 }
 
 .product-card {
@@ -178,27 +170,17 @@ nav ul li a:hover::after {
   font-weight: 700;
 }
 
-#card-info-odd {
-  font-size: 0.9rem; /* Smaller font size */
-  text-align: center; /* Center align the text */
-  transform: rotate(-1deg); /* Apply a slight tilt to match the card's direction */
-  margin-top: 1rem;
-  opacity: 0.8; /* Slight opacity for subtle effect */
-  display: block; /* Ensure it's treated as a block element for centering */
-  width: 100%; /* Center within the card */
-  color: #555; /* Text color */
-}
+#card-info-odd,
 #card-info-even {
-  font-size: 0.9rem; /* Smaller font size */
-  text-align: center; /* Center align the text */
-  transform: rotate(1deg); /* Apply a slight tilt to match the card's direction */
+  font-size: 0.9rem;
+  text-align: center;
   margin-top: 1rem;
-  opacity: 0.8; /* Slight opacity for subtle effect */
-  display: block; /* Ensure it's treated as a block element for centering */
-  width: 100%; /* Center within the card */
-  color: #1d1c1c; /* Text color */
+  opacity: 0.8;
+  display: block;
+  width: 100%;
+  color: #555;
 }
-/* Individual card positioning */
+
 .product-card:nth-child(1) {
   top: 0px;
   z-index: 1;
@@ -206,40 +188,24 @@ nav ul li a:hover::after {
 }
 
 .product-card:nth-child(2) {
-  top: 180px; /* Larger top offset for gradual stacking */
+  top: 180px;
   z-index: 2;
   background-color: #bbdefb;
   transform: rotate(2deg);
 }
 
 .product-card:nth-child(3) {
-  top: 360px; /* Larger top offset for gradual stacking */
+  top: 360px;
   z-index: 3;
   background-color: #e3f2fd;
   transform: rotate(-2deg);
 }
 
 .product-card:nth-child(4) {
-  top: 540px; /* Larger top offset for gradual stacking */
+  top: 540px;
   z-index: 4;
   background-color: #bbdefb;
   transform: rotate(2deg);
-}
-
-/* Card content styling */
-.product-card h3 {
-  font-size: 2.5rem;
-  position: absolute;
-  right: 2rem;
-  top: 1rem;
-  opacity: 0.8;
-}
-
-.product-card p {
-  font-size: 1.5rem;
-  text-align: left;
-  padding-left: 1rem;
-  margin-top: 0.5rem;
 }
 
 /* Responsive design */
@@ -268,20 +234,13 @@ nav ul li a:hover::after {
   padding: 2rem;
   display: flex;
   padding-top: 10rem;
-  justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .ats-container {
   display: flex;
   gap: 2rem;
   align-items: center;
-}
-
-.ats-image {
-  flex: 0 0 50%; /* Image takes 50% of the container */
 }
 
 .ats-image img {
@@ -292,9 +251,8 @@ nav ul li a:hover::after {
 }
 
 .ats-text {
-  flex: 0 0 50%; /* Text takes 50% of the container */
-  border-left: 2px solid #000; /* Adds the vertical line */
-  padding-left: 1rem; /* Adds space between the text and the vertical line */
+  border-left: 2px solid #000;
+  padding-left: 1rem;
 }
 
 .ats-text h3 {
@@ -306,7 +264,6 @@ nav ul li a:hover::after {
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
 }
-
 
 /* Testimonials Section */
 .testimonials {
@@ -396,9 +353,6 @@ nav ul li a:hover::after {
     gap: 1rem; /* Smaller gap on mobile */
   }
 }
-
-
-
 /* Footer */
 footer {
   display: flex;
