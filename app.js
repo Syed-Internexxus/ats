@@ -158,8 +158,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Rebuild button functionality
     if (rebuildButton) {
-        rebuildButton.addEventListener('click', () => {
-            alert("Rebuild functionality coming soon!");
+        rebuildButton.addEventListener('click', async () => {
+            showLoader(); // Show loader while rebuild API is called
+            const jobDescription = document.getElementById('job-description').value;
+
+            if (!jobDescription) {
+                hideLoader();
+                alert("Please enter a job description to rebuild.");
+                return;
+            }
+
+            const url = "https://r8t6yi46fc.execute-api.us-west-1.amazonaws.com/default/resume_ats";
+            const payload = {
+                base64_file: base64File,
+                job_description: jobDescription
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const apiResponse = await response.json();
+                    const downloadableLink = apiResponse.body;
+
+                    // Trigger download
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = downloadableLink;
+                    downloadLink.download = 'optimised_resume.pdf';
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+
+                    hideLoader(); // Hide loader after triggering download
+
+                    // Add fallback download link
+                    const manualDownloadText = document.createElement('p');
+                    manualDownloadText.innerHTML = 'Download did not start? <a href="' + downloadableLink + '" download="optimised_resume.pdf">Click here to Start</a>';
+                    document.getElementById('rebuild-button-container').appendChild(manualDownloadText);
+                } else {
+                    hideLoader();
+                    alert("Failed to rebuild resume. Please try again.");
+                }
+            } catch (error) {
+                hideLoader();
+                console.error("Error:", error);
+                alert("An error occurred while rebuilding the resume.");
+            }
         });
     }
 
