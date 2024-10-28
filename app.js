@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resumeUploadInput = document.getElementById('resume-upload');
     const progressBar = document.getElementById('progress-bar');
     const steps = document.querySelectorAll('.step');
+    const rebuildButton = document.getElementById('rebuild-button');
     let fileUploaded = false;
     let currentStep = 1;
     let base64File = ""; // Variable to hold base64 string of the uploaded file
@@ -89,77 +90,73 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-// Show loader
-function showLoader() {
-    document.getElementById('loader').style.display = 'flex';
-  }
-  
-  // Hide loader
-  function hideLoader() {
-    document.getElementById('loader').style.display = 'none';
-  }
-  
-  // Example usage in analyzeResume function
-  async function analyzeResume(jobDescription) {
-      showLoader(); // Show loader before sending request
-  
-      const url = "https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer";
-      const payload = {
-          base64_file: base64File,
-          job_description: jobDescription
-      };
-  
-      try {
-          const response = await fetch(url, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(payload)
-          });
-  
-          if (response.ok) {
-              const apiResponse = await response.json();
-              const bodyData = JSON.parse(apiResponse.body);
-  
-              // Hide the loader once response is received
-              hideLoader();
-  
-              // Rest of the code to display analysis results
-              document.getElementById('upload-box').style.display = 'none';
-              document.getElementById('results-section').style.display = 'flex';
-              document.querySelector('.hero').classList.add('full-width');
-  
-              document.getElementById('result-content').innerHTML = `
-                  <h3>Compatibility Score: ${bodyData.score}%</h3>
-                  <ul id="points-list">
-                      ${bodyData.points.map(point => `<li>${point}</li>`).join('')}
-                  </ul>
-              `;
-              document.getElementById('resume-embed').src = URL.createObjectURL(resumeUploadInput.files[0]);
-          } else {
-              hideLoader();
-              alert("Failed to analyze resume. Please try again.");
-          }
-      } catch (error) {
-          hideLoader();
-          alert("An error occurred while analyzing the resume.");
-      }
-  }
-        
+
+    // Show loader
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        if (loader) loader.style.display = 'flex';
+    }
+
+    // Hide loader
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        if (loader) loader.style.display = 'none';
+    }
+
+    // Analyze resume
+    async function analyzeResume(jobDescription) {
+        showLoader(); // Show loader before sending request
+
+        const url = "https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer";
+        const payload = {
+            base64_file: base64File,
+            job_description: jobDescription
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                const apiResponse = await response.json();
+                const bodyData = JSON.parse(apiResponse.body);
+
+                hideLoader(); // Hide the loader once response is received
+
+                // Display analysis results
+                document.getElementById('upload-box').style.display = 'none';
+                document.getElementById('results-section').style.display = 'flex';
+                document.querySelector('.hero').classList.add('full-width');
+
+                document.getElementById('result-content').innerHTML = `
+                    <h3>Compatibility Score: ${bodyData.score}%</h3>
+                    <ul id="points-list">
+                        ${bodyData.points.map(point => `<li>${point}</li>`).join('')}
+                    </ul>
+                `;
+                document.getElementById('resume-embed').src = URL.createObjectURL(resumeUploadInput.files[0]);
+            } else {
+                hideLoader();
+                alert("Failed to analyze resume. Please try again.");
+            }
+        } catch (error) {
+            hideLoader();
+            console.error("Error:", error);
+            alert("An error occurred while analyzing the resume.");
+        }
+    }
+
     // Rebuild button functionality
-    document.getElementById('rebuild-button').addEventListener('click', () => {
-        alert("Rebuild functionality coming soon!");
-    });
-    
-    
-    // Rebuild button functionality
-    document.getElementById('rebuild-button').addEventListener('click', () => {
-        // Logic for rebuilding the resume can be implemented here
-        alert("Rebuild functionality coming soon!");
-    });
-    
-    
+    if (rebuildButton) {
+        rebuildButton.addEventListener('click', () => {
+            alert("Rebuild functionality coming soon!");
+        });
+    }
 
     // Drag-and-drop functionality
     function handleDragOver(e) {
