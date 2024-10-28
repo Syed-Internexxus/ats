@@ -1,483 +1,266 @@
 /* Basic Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-  }
-  
-  /* Navigation Bar */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+}
+
+/* Navigation Bar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ace4ed;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+  position: relative;
+}
+
+nav ul li a::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: black;
+  transition: width 0.3s ease;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+nav ul li a:hover::after {
+  width: 100%;
+}
+
+.sign-out-btn {
+  background-color: rgb(228, 19, 68);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sign-out-btn:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+/* Responsive Navigation */
+@media (max-width: 768px) {
   nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #ace4ed;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
   nav ul {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
+    flex-direction: column;
+    gap: 1rem;
   }
-  
-  nav a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    font-size: 1rem;
-    position: relative;
+  .sign-up-btn {
+    margin-top: 1rem;
   }
-  
-  nav ul li a::after {
-    content: '';
-    display: block;
-    width: 0;
-    height: 2px;
-    background: black;
-    transition: width 0.3s ease;
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-  }
-  
-  nav ul li a:hover::after {
-    width: 100%;
-  }
-  
-  .sign-out-btn {
-    background-color: rgb(228, 19, 68);
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 50px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .sign-out-btn:hover {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-  }
-  
-  /* Responsive Navigation */
-  @media (max-width: 768px) {
-    nav {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    nav ul {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .sign-up-btn {
-      margin-top: 1rem;
-    }
-  }
-  
+}
+
 /* Hero Section */
 .hero {
-    display: flex;
-    justify-content: center;
-    padding: 3rem 2rem;
-    background: #d2f5f6;
-  }
-  
-  .hero-content {
-    width: 90%;
-    max-width: 800px;
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .hero-text h1 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 2rem;
-  }
-  
-  .progress-bar {
-    display: flex;
-    gap: 2rem;
-    justify-content: space-around;
-    margin-bottom: 2rem;
-    padding-top: 30px;
-  }
-  
-  .step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .circle {
-    width: 35px;
-    height: 35px;
-    background-color: #28a745;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-  
-  .label {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  /* Upload Box Styling */
-  .upload-box {
-    border: 2px dashed #28a745;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin: 1.5rem 0;
-    text-align: center;
-    color: #555;
-    background-color: #fafafa;
-    transition: background-color 0.2s ease;
-  }
-  
-  .upload-box:hover {
-    background-color: #e9f7ef;
-  }
-  
-  .upload-box p {
-    margin: 0.5rem 0;
-    color: #666;
-  }
-  
-  .upload-button {
-    background-color: #28a745;
-    color: white;
-    padding: 0.7rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .upload-button:hover {
-    background-color: #218838;
-  }
-  
-  /* Additional Instruction Text */
-  .hero-text p {
-    margin-top: 1.5rem;
-    color: #777;
-    font-size: 0.95rem;
-  }
-  
-  .cta-btn {
-    background-color: black;
-    color: white;
-    margin-top: 20px;
-    padding: 1rem 2.5rem;
-    border-radius: 50px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .cta-btn:hover {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-  }
-  
-  /* Product Section */
-  .product-section {
-    padding: 2rem;
-  }
-  
-  .product-content {
-    display: flex;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .product-description {
-    flex: 0 0 50%;
-    padding-right: 2rem;
-  }
-  
-  .product-description h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .product-description p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-  }
-  
-  /* Product Cards */
-  .product-cards {
-    position: relative;
-    flex: 1;
-    height: 600px;
-  }
-  
-  .product-card {
-    background-color: #e3f2fd;
-    padding: 2rem;
-    border-radius: 15px;
-    width: 100%;
-    height: 150px;
-    margin-bottom: 1rem;
-    position: absolute;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    font-weight: 700;
-  }
-  
-  .product-card:nth-child(1) {
-    top: 0px;
-    transform: rotate(-2deg);
-  }
-  
-  .product-card:nth-child(2) {
-    top: 180px;
-    background-color: #bbdefb;
-    transform: rotate(2deg);
-  }
-  
-  .product-card:nth-child(3) {
-    top: 360px;
-    background-color: #e3f2fd;
-    transform: rotate(-2deg);
-  }
-  
-  .product-card:nth-child(4) {
-    top: 540px;
-    background-color: #bbdefb;
-    transform: rotate(2deg);
-  }
-  
-  #card-info-odd, #card-info-even {
-    font-size: 0.9rem;
-    text-align: center;
-    opacity: 0.8;
-    display: block;
-    width: 100%;
-    color: #555;
-  }
-
-  .description-box {
-    width: 100%;
-    background-color: #bbf2f2; /* Dark background color */
-    color: #000000; /* Light text color for contrast */
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(17, 194, 222, 0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background: #d2f5f6;
 }
 
-
-.description-box textarea {
-    width: 100%;
-    height: 150px; /* Match the height of the upload box */
-    background-color: white; /* Slightly lighter dark background */
-    color: #000000;
-    border: none;
-    border-radius: 5px;
-    padding: 0.75rem;
-    font-size: 1rem;
-    resize: none;
-    outline: none; /* Remove default outline */
+.hero.full-width {
+  width: 100%;
+  max-width: none;
+  padding: 2rem;
 }
 
-.description-box textarea::placeholder {
-    color: #030303; /* Placeholder color */
+.hero-content {
+  width: 90%;
+  max-width: 800px;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-#analyze-button {
-    background-color: #5eb2d3; /* Dark button background */
-    color: #000000;
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.hero-text h1 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 2rem;
 }
 
-#analyze-button:hover {
-    background-color: #2ab5f1; /* Slightly lighter on hover */
-}
-
-  
-  /* ATS Section */
-  .ats-section {
-    padding: 2rem;
-    padding-top: 100px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .ats-container {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-  }
-  
-  .ats-image img {
-    max-width: 85%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .ats-text {
-    flex: 0 0 50%;
-    border-left: 2px solid #000;
-    padding-left: 1rem;
-  }
-  
-  .ats-text h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-  
-  .ats-text p {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Testimonials Section */
-  .testimonials {
-    text-align: center;
-    padding: 2rem;
-  }
-  
-  .testimonial-cards {
-    padding-top: 4rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    justify-items: center;
-  }
-  
-  .testimonial-card {
-    position: relative;
-    width: 700px;
-    height: 200px;
-    background-color: #e3f2fd;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.5s ease;
-    z-index: 1;
-    text-align: center;
-  }
-  
-  .testimonial-card::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 100%;
-    height: 100%;
-    background-color: #bbdefb;
-    border-radius: 10px;
-    z-index: -1;
-    transform: rotate(0deg);
-    opacity: 0;
-  }
-  
-  .testimonial-card:hover {
-    transform: translateY(-5px) rotate(2deg);
-  }
-  
-  .testimonial-card:hover::before {
-    transform: rotate(-2deg);
-    opacity: 1;
-  }
-  
-  /* Footer */
-  footer {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: #f8f8f8;
-  }
-  
-  footer a {
-    text-decoration: none;
-    color: black;
-  }
-  
-
-  .progress-bar {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin: 2rem 0;
+.progress-bar {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+  padding-top: 30px;
 }
 
 .step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    color: #555; /* Default color for steps */
-    transition: all 0.3s ease; /* Smooth transition for color changes */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.step .circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #e0e0e0; /* Default background for steps */
-    color: #333;
-    font-weight: bold;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+.circle {
+  width: 35px;
+  height: 35px;
+  background-color: #28a745;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
-.step.active .circle {
-    background-color: #1dd3f7; /* Highlight color for the active step */
-    transform: scale(1.1); /* Slightly enlarge the active step */
+.label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
 }
 
-.step.completed .circle {
-    background-color: #1dd3f7; /* Lighter color for completed steps */
-    color: #030303;
+/* Upload Box Styling */
+.upload-box {
+  border: 2px dashed #28a745;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  text-align: center;
+  color: #555;
+  background-color: #fafafa;
+  transition: background-color 0.2s ease;
 }
 
-.step .label {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: #090909;
+.upload-box:hover {
+  background-color: #e9f7ef;
 }
 
-.step.active .label {
-    color: #080808; /* Text color for the active step */
+.upload-box p {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.upload-button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.upload-button:hover {
+  background-color: #218838;
+}
+
+/* Product Section */
+.product-section {
+  padding: 2rem;
+}
+
+.product-content {
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-description {
+  flex: 0 0 50%;
+  padding-right: 2rem;
+}
+
+.product-description h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.product-description p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Product Cards */
+.product-cards {
+  position: relative;
+  flex: 1;
+  height: 600px;
+}
+
+.product-card {
+  background-color: #e3f2fd;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 100%;
+  height: 150px;
+  margin-bottom: 1rem;
+  position: absolute;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  font-weight: 700;
+}
+
+.product-card:nth-child(1) {
+  top: 0px;
+  transform: rotate(-2deg);
+}
+
+.product-card:nth-child(2) {
+  top: 180px;
+  background-color: #bbdefb;
+  transform: rotate(2deg);
+}
+
+.product-card:nth-child(3) {
+  top: 360px;
+  background-color: #e3f2fd;
+  transform: rotate(-2deg);
+}
+
+.product-card:nth-child(4) {
+  top: 540px;
+  background-color: #bbdefb;
+  transform: rotate(2deg);
+}
+
+.description-box {
+  width: 100%;
+  background-color: #bbf2f2;
+  color: #000000;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(17, 194, 222, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 /* Results Section - 50:50 Split */
@@ -505,7 +288,6 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Analysis Results Styling */
 .analysis-results h2 {
   font-size: 1.5rem;
   color: #333;
@@ -546,12 +328,6 @@
   background-color: #218838;
 }
 
-.hero.full-width {
-  width: 100%;
-  max-width: none;
-  padding: 2rem;
-}
-
 /* Resume Display Styling */
 .resume-display h2 {
   font-size: 1.5rem;
@@ -559,10 +335,9 @@
   margin-bottom: 1rem;
 }
 
-/* Adjust resume display size */
 #resume-embed {
   width: 100%;
-  height: 700px; /* Increased height for better visibility */
+  height: 700px;
   border: none;
   border-radius: 5px;
 }
@@ -570,16 +345,16 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .results-section {
-      flex-direction: column;
-      padding: 1rem;
+    flex-direction: column;
+    padding: 1rem;
   }
   
   .analysis-results, .resume-display {
-      padding: 1rem;
-      margin-bottom: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
 
   #resume-embed {
-      height: 400px;
+    height: 400px;
   }
 }
