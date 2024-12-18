@@ -62,7 +62,7 @@ body {
 
 .resume-thumbnail img {
   width: 100%;
-  max-width: 300px;
+  max-width: 500px;
   height: auto;
   margin-bottom: 1rem;
 }

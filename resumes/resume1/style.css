@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+    position: relative;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 9.27in;
+    height: 12.00in;
+    z-index: -1;
+}
+
+.line {
+    position: absolute;
+    width: 7.98in;
+    height: 0.02in;
+}
+
+.top-line {
+    top: 1.20in;
+    left: 0.64in;
+}
+
+.middle-line {
+    top: 8.15in;
+    left: 0.64in;
+}
+
+.bottom-line {
+    top: 10.32in;
+    left: 0.64in;
+}
+
+.header {
+    position: absolute;
+    top: 0.56in;
+    left: 0.64in;
+    width: 8.00in;
+    text-align: center;
+}
+
+.header .name {
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+.header .contact {
+    font-size: 10pt;
+    margin-top: 10px;
+}
+
+.experience, .education, .skills {
+    position: relative;
+    margin: 1.5in 0.64in;
+    padding: 0;
+}
+
+h2 {
+    font-size: 11pt;
+    text-transform: uppercase;
+    margin-bottom: 0.5in;
+}
+
+article {
+    margin-bottom: 1in;
+}
+
+article .dates {
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    font-size: 10pt;
+}
+
+ul li {
+    margin-bottom: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+}
