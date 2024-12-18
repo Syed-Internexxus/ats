@@ -28,7 +28,6 @@ import("https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js").then(
               const logoutLink = document.getElementById("logout-link");
               const jobDescription = document.getElementById("job-description");
               const progressBarSteps = document.querySelectorAll(".progress-step");
-              const loader = document.getElementById("loader");
 
               // Sections
               const uploadSection = document.getElementById("upload-resume-section");
@@ -63,7 +62,7 @@ import("https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js").then(
                       // Update Upload Box Text
                       uploadText.textContent = file.name; // Show file name
                       uploadInstructions.textContent = "File uploaded successfully!";
-                      uploadLabel.style.border = "2px solid #28a745"; // Green border for success
+                      uploadLabel.style.border = "2px solidrgb(29, 198, 23)"; // Green border for success
 
                       // Convert PDF to Base64
                       base64File = await fileToBase64(file);
@@ -133,8 +132,6 @@ import("https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js").then(
                       alert("No PDF file found. Please upload a file first.");
                       return;
                   }
-
-                  loader.style.display = "flex"; // Show loader
 
                   // Prepare request payload
                   const payload = {
