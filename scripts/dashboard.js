@@ -51,22 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
         handleTemplateSelection("template");
     });
 
-    // Handle Template Selection
     function handleTemplateSelection(template) {
         if (!userState) {
             alert("No user data available. Please try again.");
             return;
         }
-
+    
         // Show loader
         loader.style.display = "block";
-
+    
         const payload = {
-            base64_url: data.base64_file,
-            job_description: data.job_description,
+            base64_url: userState.base64_file, // Correct reference to userState
+            job_description: userState.job_description, // Correct reference to userState
             template: template,
         };
-
+    
         fetch("https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer", {
             method: "POST",
             headers: {
@@ -92,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Always hide the loader
                 loader.style.display = "none";
             });
-    }
+    }    
 
     // Logout Function
     function handleLogout() {
