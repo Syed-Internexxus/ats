@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const profileFormSection = document.getElementById("profile-form-section");
     const selectResumeButtons = document.querySelectorAll(".select-resume-btn");
     const saveFinishButton = document.querySelector(".save-button");
+    const mainHeading = document.querySelector(".profile-form h1");
 
     // Sidebar Navigation
     const sidebarItems = document.querySelectorAll(".sidebar-item");
@@ -35,10 +36,17 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", (e) => {
             const format = e.target.closest(".resume-option").dataset.format;
             selectedTemplate = format;
+
+            // Store selected template in localStorage
+            localStorage.setItem("selectedTemplate", selectedTemplate);
+
             if (userState) {
                 populateFormFields(userState);
                 resumeSelection.style.display = "none";
                 profileFormSection.style.display = "block";
+
+                // Update heading text
+                mainHeading.textContent = "Let's make sure this is right, cool?";
             } else {
                 alert("Failed to load user data. Please try again.");
             }
@@ -124,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Logout
     function handleLogout() {
         localStorage.removeItem("dashboardData"); // Clear stored user data
+        localStorage.removeItem("selectedTemplate"); // Clear selected template
         alert("You have been logged out.");
         window.location.href = "index.html";
     }
