@@ -3,164 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <title>Profile Form - Enter Details</title>
+    <link rel="stylesheet" href="css/dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
+    <header class="navbar">
         <div class="logo">
-            <a href="https://internexxus.com">
-                <img width="220" height="42" src="assets/logo.jpg" alt="Logo">
+            <a href="index.html">
+                <img src="assets/logo.png" alt="Internexxus Logo">
             </a>
         </div>
-        <ul>
-            <li><a href="https://cover-letter-generator.internexxus.com/">Cover Letter Generator</a></li>
-            <li><a href="https://internexxus.com/internships/?filter-orderby=newest&jobs_ppp=12">Explore Internships</a></li>
-        </ul>
-        <a href="#" class="sign-out-btn" id="sign-out-btn">Sign Out</a>
-    </nav>        
+        <nav>
+            <a href="https://internexxus.com/resume-analyzer/">All Tools</a>
+            <a href="https://internexxus.com/">Dashboard</a>
+            <a href="#" id="logout-link">Logout</a>
+        </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Create a Professional Resume Tailored to Your Target Job in Minutes</h1>
-
-            <!-- Progress Bar -->
-            <div class="progress-bar" id="progress-bar">
-                <div class="step active" id="step1">
-                    <div class="circle">1</div>
-                    <div class="label">Upload Resume</div>
+    <main class="profile-form">
+        <h1>Choose Your Resume Format</h1>
+        <!-- Resume Selection Section -->
+        <section id="resume-selection" class="resume-selection">
+            <div class="resume-option" data-format="resume1">
+                <div class="resume-thumbnail">
+                    <img src="resumes/resume_1.png" alt="Resume Format 1">
                 </div>
-                <div class="step" id="step2">
-                    <div class="circle">2</div>
-                    <div class="label">Add Job Description</div>
+                <button class="select-resume-btn">Select Template 1</button>
+            </div>
+            <div class="resume-option" data-format="resume2">
+                <div class="resume-thumbnail">
+                    <img src="resumes/resume_2.png" alt="Resume Format 2">
                 </div>
+                <button class="select-resume-btn">Select Template 2</button>
             </div>
+        </section>
 
-            <!-- Upload Box -->
-            <div class="upload-box" id="upload-box">
-                <p id="upload-instructions">Click or Drag File Here to Upload Your Resume/CV</p>
-                <p><small>Choose a pdf file up to 5MB</small></p>
-                <button class="upload-button" id="upload-button">Upload Resume</button>
-                <input type="file" id="resume-upload" accept=".pdf, .doc, .docx" style="display: none;">
-            </div>
+        <!-- Profile Form Section (Initially Hidden) -->
+        <div class="form-container" style="display: none;" id="profile-form-section">
+            <aside class="sidebar">
+                <a href="#personal-details" class="sidebar-item active">
+                    <img src="assets/user.png" alt="Personal Details">
+                </a>
+                <a href="#education" class="sidebar-item">
+                    <img src="assets/edu.png" alt="Education">
+                </a>
+                <a href="#work-experience" class="sidebar-item">
+                    <img src="assets/port.png" alt="Work Experience">
+                </a>
+                <a href="#skills" class="sidebar-item">
+                    <img src="assets/idea.png" alt="Skills">
+                </a>
+                <a href="#links" class="sidebar-item">
+                    <img src="assets/link.png" alt="Links">
+                </a>
+                <a href="#certificates" class="sidebar-item">
+                    <img src="assets/certificate.png" alt="Certificates">
+                </a>
+            </aside>
 
-            <!-- Results Section (Hidden initially) -->
-            <div class="results-section" id="results-section" style="display: none;">
-                <div class="results-container">
-                    <!-- Left side: Analysis results -->
-                    <div class="analysis-results" id="analysis-results">
-                        <h2>Resume Analysis</h2>
-                        <p id="result-content">Your analysis results will be displayed here.</p>
-                        <button id="rebuild-button" class="upload-button">Rebuild My Resume</button>
+            <section id="personal-details" class="form-section">
+                <h2>Enter Your <span>Personal Details</span></h2>
+
+                <div class="form-grid">
+                    <div>
+                        <label for="first-name">First name</label>
+                        <input type="text" id="first-name" placeholder="ex. Jane">
                     </div>
-
-                    <!-- Right side: Resume display -->
-                    <div class="resume-display" id="resume-display">
-                        <h2>Uploaded Resume</h2>
-                        <embed id="resume-embed" src="" type="application/pdf" width="100%" height="500px" />
+                    <div>
+                        <label for="last-name">Last name</label>
+                        <input type="text" id="last-name" placeholder="ex. Doe">
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Product Section -->
-    <section class="product-section">
-        <div class="product-content">
-            <!-- Left side: Description -->
-            <div class="product-description">
-                <h2>Discover the Power of Our Products</h2>
-                <p>
-                    At Internexus, we offer a comprehensive suite of tools designed to enhance your job search experience. Our Cover Letter Generator crafts personalized cover letters that stand out, while the Resume Analyser and Builder helps you create and refine resumes that showcase your strengths. Ensure your application passes through screening systems with our ATS Compatibility Checker, and optimize your professional profile with our LinkedIn Optimizer. Each product is tailored to give you a competitive edge in your career journey.
-                </p>
-            </div>
-
-            <!-- Right side: Product Cards -->
-            <div class="product-cards">
-                <div class="product-card">
-                    <h3>01</h3>
-                    <p>Upload Resume</p>
-                    <p id="card-info-odd">Upload your resume to the tool</p>
+                <div class="form-grid">
+                    <div>
+                        <label for="primary-phone">Primary Phone Number</label>
+                        <input type="text" id="primary-phone" placeholder="(xxx)-xxx-xxxx">
+                    </div>
+                    <div>
+                        <label for="secondary-phone">Secondary Phone Number</label>
+                        <input type="text" id="secondary-phone" placeholder="(xxx)-xxx-xxxx">
+                    </div>
                 </div>
-                <div class="product-card">
-                    <h3>02</h3>
-                    <p>Upload Job Description</p>
-                    <p id="card-info-even">Upload or paste the targeted job description</p>
-                </div>
-                <div class="product-card">
-                    <h3>03</h3>
-                    <p>Review Suggestions</p>
-                    <p id="card-info-odd">Get suggestions on how to improve your resume for ATS compatibility</p>
-                </div>
-                <div class="product-card">
-                    <h3>04</h3>
-                    <p>Download Compatible Resume</p>
-                    <p id="card-info-even">Download the optimized resume for ATS submission</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- ATS Compatibility Section -->
-    <section class="ats-section">
-        <div class="ats-container">
-            <div class="ats-image">
-                <img class="ats-image" src="assets/ats.jpeg" alt="ATS Compatibility">
-            </div>
-            <div class="ats-text">
-                <h3>ATS Compatibility Check</h3>
-                <p>Instantly scan your resume to see how well it aligns with Applicant Tracking Systems.</p>
-                <h3>Keyword Optimization</h3>
-                <p>Receive suggestions on how to optimize your resume with relevant keywords for better ATS performance.</p>
-                <h3>Customized Feedback</h3>
-                <p>Get personalized feedback on how to improve your resume's compatibility with ATS.</p>
-            </div>
-        </div>
-    </section>
+                <div class="form-grid">
+                    <div>
+                        <label for="primary-email">Primary Email</label>
+                        <input type="email" id="primary-email" placeholder="xxx@xxx.xxx">
+                    </div>
+                    <div>
+                        <label for="backup-email">Backup Email</label>
+                        <input type="email" id="backup-email" placeholder="xxx@xxx.xxx">
+                    </div>
+                </div>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <h2>Testimonials</h2>
-        <div class="testimonial-cards">
-            <div class="testimonial-card">
-                <p><img src="/path/to/johndoe.jpg" alt="John Doe"> <span class="name">John Doe</span><br><span class="position">HR Manager</span></p>
-                <p>5 stars</p>
-            </div>
-            <div class="testimonial-card">
-                <p><img src="/path/to/janesmith.jpg" alt="Jane Smith"> <span class="name">Jane Smith</span><br><span class="position">Recruitment Specialist</span></p>
-                <p>Great tool for ensuring resumes get through ATS seamlessly.</p>
-            </div>
-            <div class="testimonial-card">
-                <p><img src="/path/to/davidjohnson.jpg" alt="David Johnson"> <span class="name">David Johnson</span><br><span class="position">Talent Acquisition Lead</span></p>
-                <p>This tool has been a game-changer for our hiring team.</p>
-            </div>
-            <div class="testimonial-card">
-                <p><img src="/path/to/emilybrown.jpg" alt="Emily Brown"> <span class="name">Emily Brown</span><br><span class="position">HR Coordinator</span></p>
-                <p>Our recruitment process has become much more efficient.</p>
-            </div>
-        </div>
-    </section>
+                <div class="form-grid">
+                    <div>
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="Start Typing...">
+                    </div>
+                </div>
 
-    <!-- Footer -->
-    <footer>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Cookies Policy</a>
+
+                <button class="next-button">Next →</button>
+            </section>
+
+            <section id="education" class="form-section">
+                <h2>Enter your <span>Education Details</span></h2>
+                <!-- Editable Form for Education -->
+                <div class="education-form">
+                    <div class="form-grid">
+                        <div>
+                            <label for="school-name">School Name</label>
+                            <input type="text" id="school-name" placeholder="Stanford University">
+                        </div>
+                        <div>
+                            <label for="degree">Degree</label>
+                            <input type="text" id="degree" placeholder="ex. Bachelors of Science in Biology">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div>
+                            <label for="edu-start-date">Start</label>
+                            <input type="month" id="edu-start-date">
+                        </div>
+                        <div>
+                            <label for="edu-end-date">End</label>
+                            <input type="month" id="edu-end-date">
+                        </div>
+                        <div>
+                            <label for="gpa">GPA</label>
+                            <input type="text" id="gpa" placeholder="ex. 4.0">
+                        </div>
+                    </div>
+                    <div class="form-grid full-width">
+                        <label for="details">Details</label>
+                        <textarea id="details" placeholder="Include relevant coursework, honors, achievements, research, etc."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="delete-btn">Delete</button>
+                        <button class="save-btn">Save</button>
+                    </div>
+                </div>
+            
+                <!-- Add Another Experience -->
+                <button class="add-education-btn">+ Add another education</button>
+            
+                <!-- Next Button -->
+                <button class="next-button">Next →</button>
+            </section>
+            
+            <section id="work-experience" class="form-section">
+                <!-- Editable Form for Work Experience -->
+                <div class="work-form">
+                    <div class="form-grid">
+                        <div>
+                            <label for="company-name">Company Name</label>
+                            <input type="text" id="company-name" placeholder="Stripe">
+                        </div>
+                        <div>
+                            <label for="job-title">Title</label>
+                            <input type="text" id="job-title" placeholder="ex. Software Engineer">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div>
+                            <label for="start-date">Start</label>
+                            <input type="month" id="start-date">
+                        </div>
+                        <div>
+                            <label for="end-date">End</label>
+                            <input type="month" id="end-date">
+                        </div>
+                        <div>
+                            <label for="location">Location</label>
+                            <input type="text" id="location" placeholder="San Francisco, CA">
+                        </div>
+                    </div>
+                    <div class="form-grid full-width">
+                        <label for="responsibilities">Description of Responsibilities</label>
+                        <textarea id="responsibilities" placeholder="Include relevant responsibilities, achievements, contributions, research, etc."></textarea>
+                    </div>                    
+                    <div class="form-actions">
+                        <button class="delete-btn">Delete</button>
+                        <button class="save-btn">Save</button>
+                    </div>
+                </div>
+            
+                <!-- Add Another Experience -->
+                <button class="add-experience-btn">+ Add another experience</button>
+                       
+                <!-- Next Button -->
+                <button class="next-button">Next →</button>
+            </section>
+            <section id="skills" class="form-section">
+                <h2>Review <span>Skills</span></h2>
+            
+                <!-- Input for adding skills -->
+                <div class="skills-input">
+                    <label for="new-skill">Type to add a new skill</label>
+                    <input type="text" id="new-skill" placeholder="Start typing">
+                </div>
+            
+                <!-- Skill tags container -->
+                <div class="skills-tags">
+                </div>            
+                <!-- Next Button -->
+                <button class="next-button">Next →</button>
+            </section>
+            
+            <section id="links" class="form-section">
+                <h2>Review <span>Links</span></h2>
+                <!-- Editable Form for Links -->
+                <div class="link-form">
+                    <h3>New Link</h3>
+                    <div class="form-grid">
+                        <div>
+                            <label for="link-type">Link Type</label>
+                            <select id="link-type">
+                                <option value="" disabled selected>Select an option...</option>
+                                <option value="Portfolio">Portfolio</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                                <option value="GitHub">GitHub</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="link-url">Link URL</label>
+                            <input type="url" id="link-url" placeholder="ex. www.mylink.com">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="delete-btn">Delete</button>
+                        <button class="save-btn">Save</button>
+                    </div>
+                </div>
+            
+                <!-- Add Another Link -->
+                <button class="add-link-btn">+ Add another link</button>            
+            <!-- Next Button -->
+                <button class="next-button">Next →</button>
+            </section>
+            <section id="certificates" class="form-section">
+                <h2>Add <span>Certificates and Achievements</span></h2>
+                
+                <!-- Editable Form for Certificates -->
+                <div class="certificate-form">
+                    <div class="form-grid">
+                        <div>
+                            <label for="certificate-title">Certificate Title</label>
+                            <input type="text" id="certificate-title" placeholder="Ex. AWS Certified Solutions Architect">
+                        </div>
+                        <div>
+                            <label for="certificate-organization">Issuing Organization</label>
+                            <input type="text" id="certificate-organization" placeholder="Ex. Amazon Web Services">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div>
+                            <label for="certificate-date">Date of Issue</label>
+                            <input type="month" id="certificate-date">
+                        </div>
+                        <div>
+                            <label for="certificate-expiry">Expiration Date</label>
+                            <input type="month" id="certificate-expiry" placeholder="Leave blank if no expiry">
+                        </div>
+                    </div>
+                    <div class="form-grid full-width">
+                        <label for="certificate-description">Description (optional)</label>
+                        <textarea id="certificate-description" placeholder="Add any details about the achievement or certificate."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="delete-btn">Delete</button>
+                        <button class="save-btn">Save</button>
+                    </div>
+                </div>
+            
+                <!-- Add Another Certificate -->
+                <button class="add-certificate-btn">+ Add another certificate</button>
+
+                <button class="save-button">Save and Finish →</button>
+            </section>            
+
+        </div>
+        <!-- Summary container for displaying the data after save -->
+        <div class="summary-view" style="display: none;"></div>
+    </main>
+
+    <footer class="footer">
+        <p>Privacy Policy | Terms of Service | Cookies Policy</p>
+        <p>&copy; 2024 Internexxus. All rights reserved.</p>
     </footer>
-
-    <!-- Loader -->
-    <div class="loader" id="loader" style="display: none;">
-        <video autoplay loop muted playsinline class="loader-video">
-            <source src="assets/loader.webm" type="video/webm">
-            Your browser does not support the video tag.
-        </video>
-    </div>        
-
-    <script src="app.js"></script>
+    <script src="scripts/dashboard.js"></script>
 </body>
 </html>

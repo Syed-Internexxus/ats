@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Form - Internexxus</title>
+    <link rel="stylesheet" href="css/upload.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader" style="display: none;">
+        <video autoplay loop muted playsinline class="loader-video">
+            <source src="assets/loader.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+    </div>  
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/logo.png" alt="Internexxus Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="https://internexxus.com/resume-analyzer/">All Tools</a>
+            <a href="https://internexxus.com/">Dashboard</a>
+            <a href="#" id="logout-link">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-step active" id="step-1">
+            <div class="progress-step-circle">1</div>
+            <p class="progress-step-title">Upload Resume</p>
+        </div>
+        <div class="progress-step" id="step-2">
+            <div class="progress-step-circle">2</div>
+            <p class="progress-step-title">Paste Job Description</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="profile-form">
+        <!-- Step 1: Upload Resume -->
+        <section id="upload-resume-section">
+            <h1>Upload your resume</h1>
+            
+            <div class="upload-box">
+                <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" hidden>
+                <label for="resume-upload" class="upload-label">
+                    <div class="upload-icon">
+                        <img src="assets/upload.png" alt="Upload Icon">
+                    </div>
+                    <p class="upload-text">Upload File</p>
+                    <p class="upload-instructions">Choose a PDF, DOC, or DOCX file up to 5MB</p>
+                </label>
+            </div>
+
+            <div class="actions">
+                <button class="next-button" id="next-button">Next</button>
+            </div>
+        </section>
+
+        <!-- Step 2: Paste Job Description -->
+        <section id="job-description-section" style="display: none;">
+            <h1>Paste Job Description</h1>
+            <h2>Copy and paste the job description below</h2>
+
+            <div class="text-area-box">
+                <textarea id="job-description" rows="10" placeholder="Paste the job description here..."></textarea>
+            </div>
+
+            <div class="actions">
+                <button class="back-button" id="back-button">Back</button>
+                <button class="submit-button" id="submit-button">Submit</button>
+            </div>
+        </section>
+    </main>
+    <script src="scripts/upload.js"></script>
+</body>
+</html>

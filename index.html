@@ -1,133 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume Success with AI</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internexxus ATS Compatibility Checker – Perfect Your Resume for ATS Success</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Navigation -->
-  <nav>
+    <!-- Header Section -->
+    <header class="navbar">
         <div class="logo">
             <a href="https://internexxus.com">
-                <img width="220" height="42" src="assets/logo.jpg" alt="Logo">
+                <img src="assets/logo.png" alt="Internexxus Logo">
             </a>
         </div>
-    <ul>
-      <li><a href="https://cover-letter-generator.internexxus.com/">Cover Letter Generator</a></li>
-      <li><a href="https://internexxus.com/internships/?filter-orderby=newest&jobs_ppp=12">Explore Internships</a></li>
-    </ul>
-    <a href="#" id="sign-up-btn" class="sign-up-btn">Sign Up</a>
-  </nav>
+        <nav>
+            <a href="https://internexxus.com/internships/?filter-orderby=newest">Explore Internships</a>
+            <a href="https://internexxus.com/resume-analyzer/">Resume Analyzer</a>
+            <a href="https://cover-letter-generator.internexxus.com/">Cover Letter Generator</a>
+            <a href="#signup" class="signup-btn" id="auth-btn">Sign Up</a> <!-- Will toggle to "Logout" when logged in -->
+        </nav>
+    </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Boost Your Resume's Success with AI</h1>
-    <p>Ensure your resume passes through Applicant Tracking Systems with flying colors.</p>
-    <button id="get-started-btn" class="cta-btn">Get Started</button>
-  </section>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+          <h1>Ensure Your Resume is ATS-Ready</h1>
+          <p>Leverage our AI powered ATS Compatibility Checker to perfect your resume and increase your chances of landing interviews.</p>
+          <button id="get-started">Optimize My Resume</button>          
+        </div>
+    </section>
 
-  <!-- Product Section -->
-  <section class="product-section">
-    <div class="product-content">
-      <!-- Left side: Description -->
-      <div class="product-description">
-        <h2>Discover the Power of Our Products</h2>
-        <p>
-          At Internexus, we offer a comprehensive suite of tools designed to enhance your job search experience. Our Cover Letter Generator crafts personalized cover letters that stand out, while the Resume Analyser and Builder helps you create and refine resumes that showcase your strengths. Ensure your application passes through screening systems with our ATS Compatibility Checker, and optimize your professional profile with our LinkedIn Optimizer. Each product is tailored to give you a competitive edge in your career journey.
-        </p>
-      </div>
+    <!-- Login/Signup Modal -->
+    <div class="modal hidden">
+        <div class="modal-content">
+            <div class="wrapper">
+                <div class="form-container">
+                    <div class="slide-controls">
+                        <input type="radio" name="slide" id="login" checked>
+                        <input type="radio" name="slide" id="signup">
+                        <label for="login" class="slide login">Login</label>
+                        <label for="signup" class="slide signup">Signup</label>
+                        <div class="slider-tab"></div>
+                    </div>
+                    <div class="form-inner">
+                        <!-- Login Form -->
+                    <form action="#" class="login">
+                        <div class="field">
+                            <input type="text" placeholder="Email Address" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="pass-link"><a href="#">Forgot password?</a></div>
+                        <div class="field">
+                            <button type="submit" class="btn">Login</button>
+                        </div>
+                        <div class="separator">
+                            <p>or</p>
+                        </div>
+                        <div class="google-btn">
+                            <img src="assets/google-icon.png" alt="Google Icon" />
+                            <span>Login with Google</span>
+                        </div>
+                        <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
+                    </form>
 
-      <!-- Right side: Product Cards -->
-      <div class="product-cards">
-        <div class="product-card">
-          <h3>01</h3>
-          <p>Upload Resume</p>
-          <p id="card-info-odd">Upload your resume to the tool</p>
+                    <!-- Signup Form -->
+                    <form action="#" class="signup">
+                        <div class="field">
+                            <input type="text" placeholder="Email Address" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="Confirm password" required>
+                        </div>
+                        <div class="field">
+                            <button type="submit" class="btn">Signup</button>
+                        </div>
+                        <div class="separator">
+                            <p>or</p>
+                        </div>
+                        <div class="google-btn">
+                            <img src="assets/google-icon.png" alt="Google Icon" />
+                            <span>Signup with Google</span>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="product-card">
-          <h3>02</h3>
-          <p>Upload Job Description</p>
-          <p id="card-info-even">Upload or paste the targeted job description</p>
-        </div>
-        <div class="product-card">
-          <h3>03</h3>
-          <p>Review Suggestions</p>
-          <p id="card-info-odd">Get suggestions on how to improve your resume for ATS compatibility</p>
-        </div>
-        <div class="product-card">
-          <h3>04</h3>
-          <p>Download Compatible Resume</p>
-          <p id="card-info-even">Download the optimized resume for ATS submission</p>
-        </div>
-      </div>
     </div>
+    <section class="product-section">
+      <div class="product-content">
+        <!-- Left side: Description -->
+        <div class="product-description">
+          <h2><span>Elevate Your Job Hunt</span> with Internexxus</h2>
+          <p>At Internexxus, we've got all the tools you need to supercharge your job search:</p>
+          <ul>
+            <li>
+              <div>
+                <strong>Cover Letter Generator:</strong>
+                <p>Create personalized cover letters that truly stand out.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Resume Analyzer & Builder:</strong>
+                <p>Craft and polish resumes that highlight your unique strengths.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>ATS Compatibility Checker:</strong>
+                <p>Make sure your application gets noticed by screening systems.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>LinkedIn Optimizer:</strong>
+                <p>Boost your professional profile to attract the right opportunities.</p>
+              </div>
+            </li>
+          </ul>
+          <p>Each of our tools is designed to give you that extra edge in your career journey.</p>
+        </div>               
+        <!-- Right side: Product Cards -->
+        <div class="product-cards">
+          <div class="product-card">
+            <h3>01</h3>
+            <p><strong>Upload Your Resume</strong></p>
+            <p id="card-info-odd">Start by uploading your resume. ATS (Applicant Tracking Systems) scan resumes to filter candidates based on keywords and formatting.</p>
+          </div>
+          <div class="product-card">
+            <h3>02</h3>
+            <p><strong>Job Description</strong></p>
+            <p id="card-info-even">Upload or paste the job description for the role you're targeting. This helps the tool identify the most relevant keywords and requirements.</p>
+          </div>
+          <div class="product-card">
+            <h3>03</h3>
+            <p><strong>Analyze & Get Feedback</strong></p>
+            <p id="card-info-odd">Our tool compares your resume with the job description and ATS standards. Receive actionable suggestions to improve keywords, structure, and formatting.</p>
+          </div>
+          <div class="product-card">
+            <h3>04</h3>
+            <p><strong>Download Your ATS-Ready Resume</strong></p>
+            <p id="card-info-even">Download your optimized resume, perfectly tailored to pass ATS filters and increase your chances of getting noticed by recruiters.</p>
+          </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2>Try our other tools for a <span>successful job search</span></h2>
+        <h3>We offer a comprehensive suite of tools designed to give you a competitive edge in your job applications.</h3>
+        <div class="feature-cards">
+            <div class="feature-card">
+                <a href="https://cover-letter-generator.internexxus.com/">
+                    <div class="icon">
+                        <img src="assets/cover-letter.png" alt="Cover Letter">
+                    </div>
+                    <h3>Cover Letter Generator</h3>
+                    <p>Craft a personalized cover letter to stand out.</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="https://internexxus.com/resume-analyzer/">
+                    <div class="icon">
+                        <img src="assets/resume-analyzer.png" alt="Resume Builder">
+                    </div>
+                    <h3>Resume Builder</h3>
+                    <p>Create or refine your resume for your ideal role.</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="https://chromewebstore.google.com/detail/linkedin-profile-optimize/hbceglllkikabcfijcaggiifofelnfik">
+                    <div class="icon">
+                        <img src="assets/linkedin.png" alt="LinkedIn Optimizer">
+                    </div>
+                    <h3>LinkedIn Optimizer</h3>
+                    <p>Enhance your LinkedIn profile to attract recruiters.</p>
+                </a>
+            </div>
+            <div class="feature-card">
+                <a href="https://internexxus.com/internships/?filter-orderby=newest">
+                    <div class="icon">
+                        <img src="assets/job.png" alt="Job Recommendations">
+                    </div>
+                    <h3>Custom Job Recommendations</h3>
+                    <p>Get tailored job suggestions based on your resume.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>Privacy Policy | Terms of Service | Cookies Policy</p>
+        <p>&copy; 2024 Internexxus. All rights reserved.</p>
+    </footer>
 
-  </section>
-  <!-- ATS Compatibility Section -->
-  <section class="ats-section">
-    <div class="ats-container">
-      <div class="ats-image">
-        <img src="assets/ats.jpeg" alt="ATS Compatibility">
-      </div>
-      <div class="ats-text">
-        <h3>ATS Compatibility Check</h3>
-        <p>Instantly scan your resume to see how well it aligns with Applicant Tracking Systems.</p>
-        <h3>Keyword Optimization</h3>
-        <p>Receive suggestions on how to optimize your resume with relevant keywords for better ATS performance.</p>
-        <h3>Customized Feedback</h3>
-        <p>Get personalized feedback on how to improve your resume's compatibility with ATS.</p>
-      </div>
-    </div>
-  </section>
-
-<!-- Testimonials Section -->
-<section class="testimonials">
-    <h2>Testimonials</h2>
-    <div class="testimonial-cards">
-      <div class="testimonial-card">
-        <p><img src="/path/to/johndoe.jpg" alt="John Doe"> <span class="name">John Doe</span><br><span class="position">HR Manager</span></p>
-        <p>5 stars</p>
-      </div>
-      <div class="testimonial-card">
-        <p><img src="/path/to/janesmith.jpg" alt="Jane Smith"> <span class="name">Jane Smith</span><br><span class="position">Recruitment Specialist</span></p>
-        <p>Great tool for ensuring resumes get through ATS seamlessly.</p>
-      </div>
-      <div class="testimonial-card">
-        <p><img src="/path/to/davidjohnson.jpg" alt="David Johnson"> <span class="name">David Johnson</span><br><span class="position">Talent Acquisition Lead</span></p>
-        <p>This tool has been a game-changer for our hiring team.</p>
-      </div>
-      <div class="testimonial-card">
-        <p><img src="/path/to/emilybrown.jpg" alt="Emily Brown"> <span class="name">Emily Brown</span><br><span class="position">HR Coordinator</span></p>
-        <p>Our recruitment process has become much more efficient.</p>
-      </div>
-    </div>
-  </section>
-  
-
-  <!-- Footer -->
-  <footer>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms of Service</a>
-    <a href="#">Cookies Policy</a>
-  </footer>
-  <!-- Firebase App (compatibility version) -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-  
-  <!-- Firebase Authentication (compatibility version) -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-  
-  <!-- Firebase Firestore (compatibility version) -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-  
-  <!-- Firebase Storage (compatibility version) -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-storage-compat.js"></script>
-
-  <!-- Custom Script with Firebase Configuration (type="module" for imports in custom scripts) -->
-  <script src="scripts.js"></script>
+    <script type="module" src="scripts/script.js"></script>
 </body>
 </html>
