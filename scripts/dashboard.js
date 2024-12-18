@@ -4,8 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // DOM Elements
     const logoutLink = document.getElementById("logout-link");
-    const resumeSelection = document.getElementById("resume-selection");
-    const selectResumeButtons = document.querySelectorAll(".select-resume-btn");
+    const loader = document.getElementById("loader");
+    const selectTemplate1Btn = document.getElementById("select-template1");
+    const selectTemplate2Btn = document.getElementById("select-template2");
 
     // Load User State from LocalStorage
     try {
@@ -28,29 +29,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Event Listeners
     logoutLink.addEventListener("click", handleLogout);
-
-    selectResumeButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const resumeOption = e.target.closest(".resume-option");
-            if (!resumeOption) return;
-
-            const format = resumeOption.dataset.format; // e.g., 'resume1' or 'resume2'
-            handleTemplateSelection(format);
-        });
+    selectTemplate1Btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleTemplateSelection("template");
+    });
+    selectTemplate2Btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleTemplateSelection("template1");
     });
 
     // Handle Template Selection
-    function handleTemplateSelection(format) {
+    function handleTemplateSelection(template) {
         if (!userState) {
             alert("No user data available. Please try again.");
             return;
         }
 
+        // Show loader
+        loader.style.display = "block";
+
         const payload = {
             base64_url: userState.base64_file,
             job_description: userState.job_description,
-            template: format === 'resume1' ? 'template' : 'template1'
+            template: template
         };
 
         fetch('https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer', {
@@ -64,11 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             // Handle API response
             console.log(data);
+            // Hide loader
+            loader.style.display = "none";
             // Add any further actions based on the API response here
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred while processing your request.');
+            // Hide loader
+            loader.style.display = "none";
         });
     }
 
