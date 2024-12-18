@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Personal Details
         document.getElementById("first-name").value = data["First Name"] || "";
         document.getElementById("last-name").value = data["Last Name"] || "";
-        document.getElementById("summary").value = data["Professional Summary"] || "";
 
         // Education
         populateDynamicSection("#education", data.Education, "education-item", `
