@@ -489,22 +489,6 @@ select:valid {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Corrected selector if 'p1' is a typo */
-.summary-view p {
-  /* If specific styles are needed, add a class instead */
-}
-
-/* Align "Current Information" and "Edit information" in one line */
-.summary-view h2,
-.summary-view .edit-information {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0;
-}
-
-.summary-view h2 {
-  margin-right: 1rem;
-}
 
 /* Edit information button */
 .edit-information {
