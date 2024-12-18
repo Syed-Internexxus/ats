@@ -106,150 +106,109 @@ document.addEventListener("DOMContentLoaded", () => {
         // Personal Details
         document.getElementById("first-name").value = data["First Name"] || "";
         document.getElementById("last-name").value = data["Last Name"] || "";
+        document.getElementById("summary").value = data["Professional Summary"] || "";
 
-        // Professional Summary (if exists)
-        const summaryInput = document.getElementById("summary");
-        if (summaryInput) {
-            summaryInput.value = data["Professional Summary"] || "";
+        // Contact Details
+        if (data.Contact) {
+            document.getElementById("phone").value = data.Contact.Phone || "";
+            document.getElementById("email").value = data.Contact.Email || "";
+            document.getElementById("personal-location").value = data.Contact.Address || "";
         }
-
-        // Personal Location (Unique ID)
-        const personalLocation = document.getElementById("personal-location");
-        if (personalLocation) {
-            personalLocation.value = data["Location"] || "";
-        }
-
-        // Education Section
-        populateDynamicSection("#education", data.Education || [], "education-item", `
-            <div class="education-item">
-                <div class="form-grid">
-                    <div>
-                        <label>Certificate Title:</label>
-                        <input type="text" value="{{Certificate Title}}" disabled />
-                    </div>
-                    <div>
-                        <label>Issuing Organization:</label>
-                        <input type="text" value="{{Issuing Organization}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div>
-                        <label>Date of Issue:</label>
-                        <input type="month" value="{{Date of Issue}}" disabled />
-                    </div>
-                    <div>
-                        <label>Expiration Date:</label>
-                        <input type="month" value="{{Expiration Date}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid full-width">
-                    <label>Description:</label>
-                    <textarea disabled>{{Description}}</textarea>
-                </div>
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `);
-
-        // Work Experience Section
-        const allExperience = [...(data.Experience || []), ...(data["Other Experience"] || [])];
-        populateDynamicSection("#work-experience", allExperience, "experience-item", `
-            <div class="experience-item">
-                <div class="form-grid">
-                    <div>
-                        <label>Company:</label>
-                        <input type="text" value="{{Company}}" disabled />
-                    </div>
-                    <div>
-                        <label>Title:</label>
-                        <input type="text" value="{{Title}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div>
-                        <label>Start:</label>
-                        <input type="month" value="{{Start}}" disabled />
-                    </div>
-                    <div>
-                        <label>End:</label>
-                        <input type="month" value="{{End}}" disabled />
-                    </div>
-                    <div>
-                        <label>Location:</label>
-                        <input type="text" value="{{Location}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid full-width">
-                    <label>Description of Responsibilities:</label>
-                    <textarea disabled>{{Details}}</textarea>
-                </div>                    
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `, (item) => ({
-            ...item,
-            Details: item.Details ? item.Details.join("\n") : "",
-        }));
-
-        // Certificates Section
-        populateDynamicSection("#certificates", data.Certificates || [], "certificate-form", `
-            <div class="certificate-form">
-                <div class="form-grid">
-                    <div>
-                        <label>Certificate Title:</label>
-                        <input type="text" value="{{Certificate Title}}" disabled />
-                    </div>
-                    <div>
-                        <label>Issuing Organization:</label>
-                        <input type="text" value="{{Issuing Organization}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div>
-                        <label>Date of Issue:</label>
-                        <input type="month" value="{{Date of Issue}}" disabled />
-                    </div>
-                    <div>
-                        <label>Expiration Date:</label>
-                        <input type="month" value="{{Expiration Date}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid full-width">
-                    <label>Description:</label>
-                    <textarea disabled>{{Description}}</textarea>
-                </div>
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `);
 
         // Links Section
-        populateDynamicSection("#links", data.Links || [], "link-form", `
-            <div class="link-form">
-                <div class="form-grid">
-                    <div>
-                        <label>Link Type:</label>
-                        <select disabled>
-                            <option value="{{Link Type}}" selected>{{Link Type}}</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Link URL:</label>
-                        <input type="url" value="{{Link URL}}" disabled />
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `);
+        populateLinks(data.Links || []);
+
+        // Education Section
+        populateEducation(data.Education || []);
+
+        // Experience Section
+        const allExperience = [...(data.Experience || []), ...(data["Other Experience"] || [])];
+        populateExperience(allExperience);
+
+        // Skills Section
+        populateSkills([...data["Core Skills"] || [], ...data["Secondary Skills"] || []]);
+
+        // Certificates Section
+        populateCertificates(data.Certificates || []);
+
+        // Achievements Section (if applicable)
+        populateAchievements(data.Achievements || []);
+    }
+
+    // Function to populate Links
+    function populateLinks(links) {
+        // Populate existing link fields
+        if (links[0]) {
+            document.querySelector("#links input[type='url']").value = sanitizeInput(links[0] || "");
+        }
+
+        // Add additional link entries
+        for (let i = 1; i < links.length; i++) {
+            addLinkSection({ "Link URL": links[i] });
+        }
+    }
+
+    // Function to populate Education
+    function populateEducation(educationList) {
+        // Populate existing education fields
+        if (educationList[0]) {
+            const edu = educationList[0];
+            document.querySelector("#education input[name='degree-title']").value = sanitizeInput(edu.Degree || "");
+            document.querySelector("#education input[name='school']").value = sanitizeInput(edu.School || "");
+            document.querySelector("#education input[name='dates']").value = sanitizeInput(edu.Dates || "");
+            document.querySelector("#education input[name='location']").value = sanitizeInput(edu.Location || "");
+            document.querySelector("#education textarea[name='description']").value = sanitizeInput(edu.Honors || "");
+        }
+
+        // Add additional education entries
+        for (let i = 1; i < educationList.length; i++) {
+            addEducationSection(educationList[i]);
+        }
+    }
+
+    // Function to populate Experience
+    function populateExperience(experienceList) {
+        // Populate existing experience fields
+        if (experienceList[0]) {
+            const exp = experienceList[0];
+            document.querySelector("#work-experience input[name='company']").value = sanitizeInput(exp.Company || "");
+            document.querySelector("#work-experience input[name='title']").value = sanitizeInput(exp.Title || "");
+            document.querySelector("#work-experience input[name='dates']").value = sanitizeInput(exp.Dates || "");
+            document.querySelector("#work-experience input[name='location']").value = sanitizeInput(exp.Location || "");
+            document.querySelector("#work-experience textarea[name='details']").value = sanitizeInput(exp.Details?.join("\n") || "");
+        }
+
+        // Add additional experience entries
+        for (let i = 1; i < experienceList.length; i++) {
+            addExperienceSection(experienceList[i]);
+        }
+    }
+
+    // Function to populate Skills
+    function populateSkills(skills) {
+        skills.forEach(skill => {
+            addSkillTag(skill);
+        });
+    }
+
+    // Function to populate Certificates
+    function populateCertificates(certificates) {
+        // Populate existing certificate fields
+        if (certificates[0]) {
+            const cert = certificates[0];
+            document.querySelector("#certificates input[name='certificate-name']").value = sanitizeInput(cert.Name || "");
+            document.querySelector("#certificates input[name='year']").value = sanitizeInput(cert.Year || "");
+        }
+
+        // Add additional certificate entries
+        for (let i = 1; i < certificates.length; i++) {
+            addCertificateSection(certificates[i]);
+        }
+    }
+
+    // Function to populate Achievements (if you have a section for it)
+    function populateAchievements(achievements) {
+        // Implement similar to certificates or experience sections
     }
 
     // Event Handlers
@@ -482,26 +441,26 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="form-grid">
                 <div>
                     <label>Degree Title:</label>
-                    <input type="text" value="${sanitizeInput(edu["Degree Title"] || "")}" disabled />
+                    <input type="text" name="degree-title" value="${sanitizeInput(edu.Degree || "")}" disabled />
                 </div>
                 <div>
-                    <label>University:</label>
-                    <input type="text" value="${sanitizeInput(edu["University"] || "")}" disabled />
+                    <label>School:</label>
+                    <input type="text" name="school" value="${sanitizeInput(edu.School || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid">
                 <div>
-                    <label>Date of Issue:</label>
-                    <input type="month" value="${sanitizeInput(edu["Date of Issue"] || "")}" disabled />
+                    <label>Dates:</label>
+                    <input type="text" name="dates" value="${sanitizeInput(edu.Dates || "")}" disabled />
                 </div>
                 <div>
-                    <label>Expiration Date:</label>
-                    <input type="month" value="${sanitizeInput(edu["Expiration Date"] || "")}" disabled />
+                    <label>Location:</label>
+                    <input type="text" name="location" value="${sanitizeInput(edu.Location || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid full-width">
-                <label>Description:</label>
-                <textarea disabled>${sanitizeInput(edu["Description"] || "")}</textarea>
+                <label>Honors:</label>
+                <textarea name="description" disabled>${sanitizeInput(edu.Honors || "")}</textarea>
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
@@ -519,36 +478,34 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        const details = exp.Details ? exp.Details.join("\n") : "";
+
         const newForm = document.createElement("div");
         newForm.classList.add("experience-item");
         newForm.innerHTML = `
             <div class="form-grid">
                 <div>
                     <label>Company:</label>
-                    <input type="text" value="${sanitizeInput(exp["Company"] || "")}" disabled />
+                    <input type="text" name="company" value="${sanitizeInput(exp.Company || "")}" disabled />
                 </div>
                 <div>
                     <label>Title:</label>
-                    <input type="text" value="${sanitizeInput(exp["Title"] || "")}" disabled />
+                    <input type="text" name="title" value="${sanitizeInput(exp.Title || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid">
                 <div>
-                    <label>Start:</label>
-                    <input type="month" value="${sanitizeInput(exp["Start"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>End:</label>
-                    <input type="month" value="${sanitizeInput(exp["End"] || "")}" disabled />
+                    <label>Dates:</label>
+                    <input type="text" name="dates" value="${sanitizeInput(exp.Dates || "")}" disabled />
                 </div>
                 <div>
                     <label>Location:</label>
-                    <input type="text" value="${sanitizeInput(exp["Location"] || "")}" disabled />
+                    <input type="text" name="location" value="${sanitizeInput(exp.Location || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid full-width">
-                <label>Description of Responsibilities:</label>
-                <textarea disabled>${sanitizeInput(exp["Description"] || "")}</textarea>
+                <label>Details:</label>
+                <textarea name="details" disabled>${sanitizeInput(details)}</textarea>
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
@@ -571,18 +528,8 @@ document.addEventListener("DOMContentLoaded", () => {
         newForm.innerHTML = `
             <div class="form-grid">
                 <div>
-                    <label>Link Type:</label>
-                    <select disabled>
-                        <option value="" disabled>Select an option...</option>
-                        <option value="Portfolio" ${link["Link Type"] === "Portfolio" ? "selected" : ""}>Portfolio</option>
-                        <option value="LinkedIn" ${link["Link Type"] === "LinkedIn" ? "selected" : ""}>LinkedIn</option>
-                        <option value="GitHub" ${link["Link Type"] === "GitHub" ? "selected" : ""}>GitHub</option>
-                        <option value="Other" ${link["Link Type"] === "Other" ? "selected" : ""}>Other</option>
-                    </select>
-                </div>
-                <div>
                     <label>Link URL:</label>
-                    <input type="url" value="${sanitizeInput(link["Link URL"] || "")}" disabled />
+                    <input type="url" value="${sanitizeInput(link || "")}" disabled />
                 </div>
             </div>
             <div class="form-actions">
@@ -606,27 +553,13 @@ document.addEventListener("DOMContentLoaded", () => {
         newForm.innerHTML = `
             <div class="form-grid">
                 <div>
-                    <label>Certificate Title:</label>
-                    <input type="text" value="${sanitizeInput(cert["Certificate Title"] || "")}" disabled />
+                    <label>Certificate Name:</label>
+                    <input type="text" name="certificate-name" value="${sanitizeInput(cert.Name || "")}" disabled />
                 </div>
                 <div>
-                    <label>Issuing Organization:</label>
-                    <input type="text" value="${sanitizeInput(cert["Issuing Organization"] || "")}" disabled />
+                    <label>Year:</label>
+                    <input type="text" name="year" value="${sanitizeInput(cert.Year || "")}" disabled />
                 </div>
-            </div>
-            <div class="form-grid">
-                <div>
-                    <label>Date of Issue:</label>
-                    <input type="month" value="${sanitizeInput(cert["Date of Issue"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>Expiration Date:</label>
-                    <input type="month" value="${sanitizeInput(cert["Expiration Date"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-grid full-width">
-                <label>Description:</label>
-                <textarea disabled>${sanitizeInput(cert["Description"] || "")}</textarea>
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
