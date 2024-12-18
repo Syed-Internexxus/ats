@@ -26,6 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Element with class 'skills-tags' not found. Please ensure it exists in the HTML.");
     }
 
+    // Define newSkillInput in the outer scope to avoid ReferenceError
+    const newSkillInput = document.getElementById("new-skill");
+    if (newSkillInput) {
+        newSkillInput.value = ""; // Clear any existing value
+    } else {
+        console.error("Element with id 'new-skill' not found. Please ensure it exists in the HTML.");
+    }
+
     // Load User State from LocalStorage
     try {
         const data = localStorage.getItem("dashboardData");
@@ -43,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Define populateDynamicSection
     function populateDynamicSection(selector, items = [], className, template, dataFormatter = (item) => item) {
         const section = document.querySelector(selector);
-        if (!section || !items) return;
+        if (!section || !items.length) return;
 
         section.innerHTML = ""; // Clear existing content
         items.forEach((item) => {
@@ -55,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let content = template;
             for (const key in formattedItem) {
                 const value = formattedItem[key] || ""; // Avoid undefined values
-                content = content.replace(new RegExp(`{{${key}}}`, "g"), value);
+                content = content.replace(new RegExp(`{{${key}}}`, "g"), sanitizeInput(value));
             }
 
             div.innerHTML = content;
@@ -70,6 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Personal Details
         document.getElementById("first-name").value = data["First Name"] || "";
         document.getElementById("last-name").value = data["Last Name"] || "";
+
+        // Professional Summary (if exists)
         const summaryInput = document.getElementById("summary");
         if (summaryInput) {
             summaryInput.value = data["Professional Summary"] || "";
@@ -82,14 +92,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Education Section
-        populateDynamicSection("#education", data.Education, "education-item", `
+        populateDynamicSection("#education", data.Education || [], "education-item", `
             <div class="education-form">
-                <label>School:</label> <input type="text" value="{{School}}" />
-                <label>Degree:</label> <input type="text" value="{{Degree}}" />
-                <label>Location:</label> <input type="text" value="{{Location}}" />
-                <label>Dates:</label> <input type="text" value="{{Dates}}" />
-                <label>GPA:</label> <input type="text" value="{{GPA}}" />
-                <label>Honors:</label> <input type="text" value="{{Honors}}" />
+                <label>School:</label>
+                <input type="text" value="{{School}}" disabled />
+                
+                <label>Degree:</label>
+                <input type="text" value="{{Degree}}" disabled />
+                
+                <label>Location:</label>
+                <input type="text" value="{{Location}}" disabled />
+                
+                <label>Dates:</label>
+                <input type="text" value="{{Dates}}" disabled />
+                
+                <label>GPA:</label>
+                <input type="text" value="{{GPA}}" disabled />
+                
+                <label>Honors:</label>
+                <input type="text" value="{{Honors}}" disabled />
+                
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
             </div>
         `);
 
@@ -97,36 +123,57 @@ document.addEventListener("DOMContentLoaded", () => {
         const allExperience = [...(data.Experience || []), ...(data["Other Experience"] || [])];
         populateDynamicSection("#work-experience", allExperience, "experience-item", `
             <div class="work-form">
-                <label>Company:</label> <input type="text" value="{{Company}}" />
-                <label>Title:</label> <input type="text" value="{{Title}}" />
-                <label>Location:</label> <input type="text" value="{{Location}}" />
-                <label>Dates:</label> <input type="text" value="{{Dates}}" />
+                <label>Company:</label>
+                <input type="text" value="{{Company}}" disabled />
+                
+                <label>Title:</label>
+                <input type="text" value="{{Title}}" disabled />
+                
+                <label>Location:</label>
+                <input type="text" value="{{Location}}" disabled />
+                
+                <label>Dates:</label>
+                <input type="text" value="{{Dates}}" disabled />
+                
                 <label>Details:</label>
-                <textarea>{{Details}}</textarea>
+                <textarea disabled>{{Details}}</textarea>
+                
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
             </div>
         `, (item) => ({
             ...item,
             Details: item.Details ? item.Details.join("\n") : "",
         }));
 
-        // Skills Section
-        const newSkillInput = document.getElementById("new-skill");
-        if (newSkillInput) {
-            newSkillInput.value = ""; // Clear any existing value
-        }
-
         // Certificates Section
-        populateDynamicSection("#certificates", data.Certificates, "certificate-item", `
+        populateDynamicSection("#certificates", data.Certificates || [], "certificate-item", `
             <div class="certificate-form">
-                <label>Name:</label> <input type="text" value="{{Name}}" />
-                <label>Year:</label> <input type="text" value="{{Year}}" />
+                <label>Name:</label>
+                <input type="text" value="{{Name}}" disabled />
+                
+                <label>Year:</label>
+                <input type="text" value="{{Year}}" disabled />
+                
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
             </div>
         `);
 
         // Links Section
-        populateDynamicSection("#links", data.Links, "link-item", `
+        populateDynamicSection("#links", data.Links || [], "link-item", `
             <div class="link-form">
-                <label>URL:</label> <input type="url" value="{{url}}" />
+                <label>URL:</label>
+                <input type="url" value="{{url}}" disabled />
+                
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
             </div>
         `);
     }
@@ -136,7 +183,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     selectResumeButtons.forEach((button) => {
         button.addEventListener("click", (e) => {
-            const format = e.target.closest(".resume-option").dataset.format;
+            const resumeOption = e.target.closest(".resume-option");
+            if (!resumeOption) return;
+
+            const format = resumeOption.dataset.format;
             selectedTemplate = format;
 
             // Store selected template in localStorage
@@ -179,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function showSection(index) {
         formSections.forEach((section, i) => {
             section.classList.toggle("active", i === index);
+            section.style.display = i === index ? "block" : "none";
         });
         sidebarItems.forEach((item, i) => {
             item.classList.toggle("active", i === index);
@@ -378,7 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
-                <button class="save-btn">Save</button>
+                <button class="save-btn">Edit</button>
             </div>
         `;
         educationContainer.appendChild(newForm);
@@ -422,7 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>                    
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
-                <button class="save-btn">Save</button>
+                <button class="save-btn">Edit</button>
             </div>
         `;
         experienceContainer.appendChild(newForm);
@@ -454,7 +505,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
-                <button class="save-btn">Save</button>
+                <button class="save-btn">Edit</button>
             </div>
         `;
         linkContainer.appendChild(newForm);
@@ -494,7 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
-                <button class="save-btn">Save</button>
+                <button class="save-btn">Edit</button>
             </div>
         `;
         certificateContainer.appendChild(newForm);
@@ -506,15 +557,96 @@ document.addEventListener("DOMContentLoaded", () => {
         return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Initialize Skills Tags Container
-    if (!skillsTagsContainer) {
-        console.error("Element with class 'skills-tags' not found. Please ensure it exists in the HTML.");
+    // Function to Add a Skill Tag
+    function addSkillTag(skill) {
+        if (!skillsTagsContainer) {
+            console.error("skillsTagsContainer is not initialized.");
+            return;
+        }
+
+        const tag = document.createElement("span");
+        tag.classList.add("skill-tag");
+        tag.textContent = skill;
+
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "×";
+        removeButton.classList.add("remove-skill");
+        Object.assign(removeButton.style, {
+            background: "none",
+            border: "none",
+            color: "#fff",
+            cursor: "pointer",
+            marginLeft: "8px"
+        });
+        removeButton.addEventListener("click", () => {
+            skillsTagsContainer.removeChild(tag);
+        });
+
+        tag.appendChild(removeButton);
+        skillsTagsContainer.appendChild(tag);
     }
+
+    // Document Body Click Event Listener for Dynamic Elements
+    document.body.addEventListener("click", async (event) => {
+        const target = event.target;
+
+        // Add new education entry
+        if (target.classList.contains("add-education-btn")) {
+            addEducationSection();
+        }
+
+        // Add new work experience entry
+        if (target.classList.contains("add-experience-btn")) {
+            addExperienceSection();
+        }
+
+        // Add new link entry
+        if (target.classList.contains("add-link-btn")) {
+            addLinkSection();
+        }
+
+        // Add new certificate entry
+        if (target.classList.contains("add-certificate-btn")) {
+            addCertificateSection();
+        }
+
+        // Delete entry
+        if (target.classList.contains("delete-btn")) {
+            const parentEntry = target.closest(".education-entry, .work-entry, .link-entry, .certificate-entry");
+            if (parentEntry) {
+                parentEntry.remove();
+            }
+        }
+
+        // Toggle Save/Edit on each section
+        if (target.classList.contains("save-btn")) {
+            const parentEntry = target.closest(".education-entry, .work-entry, .link-entry, .certificate-entry");
+            if (parentEntry) {
+                const inputs = parentEntry.querySelectorAll("input, textarea, select");
+                const isDisabled = Array.from(inputs).some(input => input.disabled);
+
+                if (isDisabled) {
+                    // Currently in 'view' mode -> Switch to 'edit' mode
+                    inputs.forEach((input) => {
+                        input.removeAttribute("disabled");
+                    });
+                    target.textContent = "Save";
+                } else {
+                    // Currently in 'edit' mode -> Switch to 'view' mode
+                    inputs.forEach((input) => {
+                        input.setAttribute("disabled", true);
+                    });
+                    target.textContent = "Edit";
+                }
+            }
+        }
+    });
 
     // Function to Show Specific Section
     function showSection(index) {
         formSections.forEach((section, i) => {
             section.classList.toggle("active", i === index);
+            section.style.display = i === index ? "block" : "none";
         });
         sidebarItems.forEach((item, i) => {
             item.classList.toggle("active", i === index);
@@ -522,8 +654,20 @@ document.addEventListener("DOMContentLoaded", () => {
         currentSectionIndex = index;
     }
 
-    // Initial Section Display
-    // Only called when resume is selected and form is displayed
-    // The 'showSection(0)' is already called when resume is selected
+    // Initialize Skills Tags Container
+    if (!skillsTagsContainer) {
+        console.error("Element with class 'skills-tags' not found. Please ensure it exists in the HTML.");
+    }
+
+    // Skills Section Event Listeners
+    if (newSkillInput) {
+        newSkillInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && newSkillInput.value.trim() !== "") {
+                event.preventDefault();
+                addSkillTag(newSkillInput.value.trim());
+                newSkillInput.value = "";
+            }
+        });
+    }
 
 });
