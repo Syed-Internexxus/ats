@@ -62,8 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
         loader.style.display = "block";
 
         const payload = {
-            base64_url: userState.base64_file,
-            job_description: userState.job_description,
+            base64_url: data.base64_file,
+            job_description: data.job_description,
             template: template,
         };
 
