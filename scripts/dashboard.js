@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
     const logoutLink = document.getElementById("logout-link");
     const loader = document.getElementById("loader");
-    const selectTemplate1Btn = document.getElementById("select-template1");
-    const selectTemplate2Btn = document.getElementById("select-template2");
+    const template1Button = document.getElementById("template1");
+    const template2Button = document.getElementById("template");
 
-    // Ensure all necessary elements exist
-    if (!logoutLink || !loader || !selectTemplate1Btn || !selectTemplate2Btn) {
+    // Ensure necessary elements exist
+    if (!logoutLink || !loader || !template1Button || !template2Button) {
         console.error("Some required DOM elements are missing.");
         return;
     }
@@ -37,15 +37,22 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Event Listeners
+    // Event Listener for Logout
     logoutLink.addEventListener("click", handleLogout);
-    selectTemplate1Btn.addEventListener("click", (e) => handleTemplateSelection(e, "template"));
-    selectTemplate2Btn.addEventListener("click", (e) => handleTemplateSelection(e, "template1"));
+
+    // Add Event Listeners for Template Buttons
+    template1Button.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleTemplateSelection("template1");
+    });
+
+    template2Button.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleTemplateSelection("template");
+    });
 
     // Handle Template Selection
-    function handleTemplateSelection(event, template) {
-        event.preventDefault();
-
+    function handleTemplateSelection(template) {
         if (!userState) {
             alert("No user data available. Please try again.");
             return;
