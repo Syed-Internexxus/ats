@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize Form
     if (userState) {
-        populateData(userState);
+        populateData(dashboardData);
     }
 
     // Logout Functionality
