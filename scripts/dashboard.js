@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     selectResumeButtons.forEach((button) => {
         button.addEventListener("click", (e) => {
+            e.preventDefault();
             const resumeOption = e.target.closest(".resume-option");
             if (!resumeOption) return;
 
@@ -46,12 +47,29 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Store resumeData in localStorage
-        localStorage.setItem("resumeData", JSON.stringify(userState));
+        const payload = {
+            base64_url: userState.base64_file,
+            job_description: userState.job_description,
+            template: format === 'resume1' ? 'template' : 'template1'
+        };
 
-        // Redirect to the selected resume template
-        // Ensure the path matches your project structure
-        window.location.href = `resumes/${format}/${format}.html`;
+        fetch('https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle API response
+            console.log(data);
+            // Add any further actions based on the API response here
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while processing your request.');
+        });
     }
 
     // Logout Function
