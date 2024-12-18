@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
     // Variables
     let userState = null;
     let selectedTemplate = null;
@@ -14,14 +14,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     const sidebarItems = document.querySelectorAll(".sidebar-item");
     const formSections = document.querySelectorAll(".form-section");
 
+    // Load User State from LocalStorage
+    try {
+        const data = localStorage.getItem("dashboardData");
+        if (data) {
+            userState = JSON.parse(data);
+        } else {
+            throw new Error("No user data found.");
+        }
+    } catch (error) {
+        console.error("Failed to load user data:", error);
+        alert("Unable to load user data. Redirecting to upload page.");
+        window.location.href = "upload.html";
+    }
+
     // Event Handlers
     logoutLink.addEventListener("click", handleLogout);
 
     selectResumeButtons.forEach((button) => {
-        button.addEventListener("click", async (e) => {
+        button.addEventListener("click", (e) => {
             const format = e.target.closest(".resume-option").dataset.format;
             selectedTemplate = format;
-            userState = await fetchUserState(); // Fetch data from upload.js
             if (userState) {
                 populateFormFields(userState);
                 resumeSelection.style.display = "none";
@@ -42,107 +55,58 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    // Fetch Data from upload.js
-    async function fetchUserState() {
-        try {
-            const response = await fetch("path-to-uploaded-user-state");
-            if (!response.ok) throw new Error("Failed to fetch user data.");
-            return await response.json();
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-            return null;
-        }
-    }
-
     // Populate Form Fields
     function populateFormFields(data) {
         // Personal Details
         document.getElementById("first-name").value = data["First Name"] || "";
         document.getElementById("last-name").value = data["Last Name"] || "";
-
-        // Professional Summary
-        const summaryField = document.getElementById("summary");
-        if (summaryField) summaryField.value = data["Professional Summary"] || "";
+        document.getElementById("summary").value = data["Professional Summary"] || "";
 
         // Education
-        const educationSection = document.querySelector("#education");
-        populateDynamicSection(
-            educationSection,
-            data.Education,
-            "education-item",
-            `
-                <label>School:</label> <input type="text" value="{{School}}" />
-                <label>Degree:</label> <input type="text" value="{{Degree}}" />
-                <label>Location:</label> <input type="text" value="{{Location}}" />
-                <label>Dates:</label> <input type="text" value="{{Dates}}" />
-                <label>GPA:</label> <input type="text" value="{{GPA}}" />
-                <label>Honors:</label> <input type="text" value="{{Honors}}" />
-            `
-        );
+        populateDynamicSection("#education", data.Education, "education-item", `
+            <label>School:</label> <input type="text" value="{{School}}" />
+            <label>Degree:</label> <input type="text" value="{{Degree}}" />
+            <label>Location:</label> <input type="text" value="{{Location}}" />
+            <label>Dates:</label> <input type="text" value="{{Dates}}" />
+            <label>GPA:</label> <input type="text" value="{{GPA}}" />
+            <label>Honors:</label> <input type="text" value="{{Honors}}" />
+        `);
 
         // Work Experience
-        const experienceSection = document.querySelector("#work-experience");
-        populateDynamicSection(
-            experienceSection,
-            data.Experience,
-            "experience-item",
-            `
-                <label>Company:</label> <input type="text" value="{{Company}}" />
-                <label>Title:</label> <input type="text" value="{{Title}}" />
-                <label>Location:</label> <input type="text" value="{{Location}}" />
-                <label>Dates:</label> <input type="text" value="{{Dates}}" />
-                <label>Details:</label>
-                <textarea>{{Details}}</textarea>
-            `,
-            (item) => ({
-                Details: item.Details?.join("\n"),
-            })
-        );
+        populateDynamicSection("#work-experience", data.Experience, "experience-item", `
+            <label>Company:</label> <input type="text" value="{{Company}}" />
+            <label>Title:</label> <input type="text" value="{{Title}}" />
+            <label>Location:</label> <input type="text" value="{{Location}}" />
+            <label>Dates:</label> <input type="text" value="{{Dates}}" />
+            <label>Details:</label>
+            <textarea>{{Details}}</textarea>
+        `, (item) => ({ Details: item.Details?.join("\n") }));
 
-        // Core Skills
-        const skillsField = document.getElementById("skills");
-        if (skillsField) skillsField.value = data["Core Skills"] || "";
+        // Skills
+        document.getElementById("skills").value = data["Core Skills"] || "";
 
         // Certificates
-        const certificatesSection = document.querySelector("#certificates");
-        populateDynamicSection(
-            certificatesSection,
-            data.Certificates,
-            "certificate-item",
-            `
-                <label>Name:</label> <input type="text" value="{{Name}}" />
-                <label>Year:</label> <input type="text" value="{{Year}}" />
-            `
-        );
+        populateDynamicSection("#certificates", data.Certificates, "certificate-item", `
+            <label>Name:</label> <input type="text" value="{{Name}}" />
+            <label>Year:</label> <input type="text" value="{{Year}}" />
+        `);
 
         // Links
-        const linksSection = document.querySelector("#links");
-        populateDynamicSection(
-            linksSection,
-            data.Links,
-            "link-item",
-            `
-                <label>URL:</label> <input type="url" value="{{}}" />
-            `
-        );
+        populateDynamicSection("#links", data.Links, "link-item", `
+            <label>URL:</label> <input type="url" value="{{}}" />
+        `);
     }
 
     // Populate Dynamic Section
-    function populateDynamicSection(
-        section,
-        items = [],
-        className,
-        template,
-        dataFormatter = (item) => item
-    ) {
+    function populateDynamicSection(selector, items = [], className, template, dataFormatter = (item) => item) {
+        const section = document.querySelector(selector);
         section.innerHTML = ""; // Clear existing content
         items.forEach((item) => {
             const formattedItem = dataFormatter(item);
             const div = document.createElement("div");
             div.className = className;
             div.innerHTML = Object.keys(formattedItem).reduce(
-                (html, key) =>
-                    html.replace(new RegExp(`{{${key}}}`, "g"), formattedItem[key]),
+                (html, key) => html.replace(new RegExp(`{{${key}}}`, "g"), formattedItem[key]),
                 template
             );
             section.appendChild(div);
@@ -154,13 +118,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         formSections.forEach((sec) => (sec.style.display = "none"));
         section.style.display = "block";
         sidebarItems.forEach((item) => item.classList.remove("active"));
-        document
-            .querySelector(`.sidebar-item[href="#${section.id}"]`)
-            .classList.add("active");
+        document.querySelector(`.sidebar-item[href="#${section.id}"]`).classList.add("active");
     }
 
     // Logout
     function handleLogout() {
+        localStorage.removeItem("dashboardData"); // Clear stored user data
         alert("You have been logged out.");
         window.location.href = "index.html";
     }
@@ -168,8 +131,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Save and Finish
     async function handleSaveAndFinish() {
         const userData = gatherFormData();
-        alert("Save and Finish functionality is under development!");
         console.log("Final User Data:", userData);
+
+        // You can implement functionality to generate and download the final resume here
+        alert("Save and Finish functionality is under development!");
     }
 
     // Gather Data
@@ -195,8 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const inputs = el.querySelectorAll("input, textarea");
             return customMapper(
                 Array.from(inputs).reduce((obj, input) => {
-                    obj[input.placeholder || input.labels[0]?.innerText] =
-                        input.value;
+                    obj[input.placeholder || input.labels[0]?.innerText] = input.value;
                     return obj;
                 }, {})
             );
