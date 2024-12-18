@@ -1,33 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Retrieve resumeData from localStorage
-    const resumeData = JSON.parse(localStorage.getItem('resumeData'));
+    // Retrieve dashboardData from localStorage
+    const dashboardData = JSON.parse(localStorage.getItem('dashboardData'));
 
-    if (!resumeData) {
+    if (!dashboardData) {
         alert("No resume data found. Please generate your resume from the dashboard.");
         window.location.href = "../../dashboard.html";
         return;
     }
 
     // Populate Full Name
-    document.getElementById('fullName').textContent = `${resumeData['First Name']} ${resumeData['Last Name']}`;
+    document.getElementById('fullName').textContent = `${dashboardData['First Name']} ${dashboardData['Last Name']}`;
 
     // Populate Contact Information
-    document.getElementById('address').textContent = resumeData.Contact.Address;
-    document.getElementById('phone').textContent = resumeData.Contact.Phone;
-    document.getElementById('email').textContent = resumeData.Contact.Email;
-    document.getElementById('linkedin').textContent = resumeData.Links[0] || "";
+    document.getElementById('address').textContent = dashboardData.Contact.Address;
+    document.getElementById('phone').textContent = dashboardData.Contact.Phone;
+    document.getElementById('email').textContent = dashboardData.Contact.Email;
+    document.getElementById('linkedin').textContent = dashboardData.Links[0] || "";
 
     // Populate Professional Summary
     const summaryContainer = document.getElementById('summary');
     summaryContainer.innerHTML += `
         <span style="font-size:10pt;font-family:Times New Roman;color:#000000;">
-            ${resumeData['Professional Summary']}
+            ${dashboardData['Professional Summary']}
         </span>
     `;
 
     // Populate Experience
     const experienceContainer = document.getElementById('experienceContainer');
-    const allExperience = [...resumeData.Experience, ...resumeData['Other Experience']];
+    const allExperience = [...dashboardData.Experience, ...dashboardData['Other Experience']];
 
     allExperience.forEach(exp => {
         const expDiv = document.createElement('div');
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Populate Education
     const educationContainer = document.getElementById('educationContainer');
-    resumeData.Education.forEach(edu => {
+    dashboardData.Education.forEach(edu => {
         const eduDiv = document.createElement('div');
         eduDiv.className = 'education-item';
         eduDiv.style.marginTop = '0.2in';
@@ -77,20 +77,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Populate Skills & Certifications
     const skillsContainer = document.getElementById('skillsContainer');
-    const allSkills = [...resumeData['Core Skills'], ...resumeData['Secondary Skills']];
+    const allSkills = [...dashboardData['Core Skills'], ...dashboardData['Secondary Skills']];
 
     skillsContainer.innerHTML += `
         <div style="font-size:10pt; margin-top:0.2in;">
             ${allSkills.join(' • ')}
         </div>
         <div style="font-size:10pt; margin-top:0.2in;">
-            <strong>Certifications:</strong> ${resumeData.Certificates.map(cert => `${cert.Name} (${cert.Year})`).join(' • ')}
+            <strong>Certifications:</strong> ${dashboardData.Certificates.map(cert => `${cert.Name} (${cert.Year})`).join(' • ')}
         </div>
     `;
 
     // Populate Achievements
     const achievementsContainer = document.getElementById('achievementsContainer');
-    resumeData.Achievements.forEach(ach => {
+    dashboardData.Achievements.forEach(ach => {
         const achDiv = document.createElement('div');
         achDiv.className = 'achievement-item';
         achDiv.style.marginTop = '0.2in';
