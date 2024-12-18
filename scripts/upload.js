@@ -142,32 +142,10 @@ import("https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js").then(
                       job_description: jobDescValue,
                   };
 
-                  try {
-                      const response = await fetch(
-                          "https://r8t6yi46fc.execute-api.us-west-1.amazonaws.com/default/resume_ats",
-                          {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify(payload),
-                          }
-                      );
+                  localStorage.setItem("dashboardData", JSON.stringify(payload));
 
-                      if (!response.ok) throw new Error("API request failed!");
-
-                      const data = await response.json();
-                      console.log("API Response:", data);
-
-                      // Store the response in localStorage or pass it via query params
-                      localStorage.setItem("dashboardData", JSON.stringify(data));
-                      
-                      // Redirect to Dashboard
-                      window.location.href = "dashboard.html";
-                  } catch (error) {
-                      console.error("Error:", error);
-                      alert("Something went wrong. Please try again.");
-                  } finally {
-                      loader.style.display = "none"; // Hide loader
-                  }
+                  // Redirect to Dashboard
+                  window.location.href = "dashboard.html";
               });
           }
       );
