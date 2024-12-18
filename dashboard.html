@@ -63,17 +63,18 @@
                     <img src="assets/certificate.png" alt="Certificates">
                 </a>
             </aside>
+
             <!-- Personal Details Section -->
             <section id="personal-details" class="form-section">
                 <h2>Enter Your <span>Personal Details</span></h2>
 
                 <div class="form-grid">
                     <div>
-                        <label for="first-name">First name</label>
+                        <label for="first-name">First Name</label>
                         <input type="text" id="first-name" placeholder="ex. Jane">
                     </div>
                     <div>
-                        <label for="last-name">Last name</label>
+                        <label for="last-name">Last Name</label>
                         <input type="text" id="last-name" placeholder="ex. Doe">
                     </div>
                 </div>
@@ -107,7 +108,7 @@
                     </div>
                 </div>
 
-                <!-- Added Professional Summary Field -->
+                <!-- Professional Summary Field -->
                 <div class="form-grid full-width">
                     <label for="summary">Professional Summary</label>
                     <textarea id="summary" placeholder="Write a brief summary of your professional background."></textarea>
@@ -120,40 +121,39 @@
             <section id="education" class="form-section">
                 <h2>Enter your <span>Education Details</span></h2>
                 <!-- Editable Form for Education -->
-                <div class="education-form">
+                <div class="education-item">
                     <div class="form-grid">
                         <div>
-                            <label for="school-name">School Name</label>
-                            <input type="text" id="school-name" placeholder="Stanford University">
+                            <label>Certificate Title:</label>
+                            <input type="text" value="" disabled />
                         </div>
                         <div>
-                            <label for="degree">Degree</label>
-                            <input type="text" id="degree" placeholder="ex. Bachelors of Science in Biology">
+                            <label>Issuing Organization:</label>
+                            <input type="text" value="" disabled />
                         </div>
                     </div>
                     <div class="form-grid">
                         <div>
-                            <label for="edu-start-date">Start</label>
-                            <input type="month" id="edu-start-date">
+                            <label>Date of Issue:</label>
+                            <input type="month" value="" disabled />
                         </div>
                         <div>
-                            <label for="edu-end-date">End</label>
-                            <input type="month" id="edu-end-date">
-                        </div>
-                        <div>
-                            <label for="gpa">GPA</label>
-                            <input type="text" id="gpa" placeholder="ex. 4.0">
+                            <label>Expiration Date:</label>
+                            <input type="month" value="" disabled />
                         </div>
                     </div>
                     <div class="form-grid full-width">
-                        <label for="details">Details</label>
-                        <textarea id="details" placeholder="Include relevant coursework, honors, achievements, research, etc."></textarea>
+                        <label>Description:</label>
+                        <textarea disabled></textarea>
                     </div>
                     <div class="form-actions">
                         <button class="delete-btn">Delete</button>
                         <button class="save-btn">Edit</button>
                     </div>
                 </div>
+            
+                <!-- Container for Additional Education Entries -->
+                <div class="additional-education-container"></div>
             
                 <!-- Add Another Education -->
                 <button class="add-education-btn">+ Add another education</button>
@@ -166,40 +166,43 @@
             <section id="work-experience" class="form-section">
                 <h2>Enter your <span>Experience Details</span></h2>
                 <!-- Editable Form for Work Experience -->
-                <div class="work-form">
+                <div class="experience-item">
                     <div class="form-grid">
                         <div>
-                            <label for="company-name">Company Name</label>
-                            <input type="text" id="company-name" placeholder="Stripe">
+                            <label>Company:</label>
+                            <input type="text" value="" disabled />
                         </div>
                         <div>
-                            <label for="job-title">Title</label>
-                            <input type="text" id="job-title" placeholder="ex. Software Engineer">
+                            <label>Title:</label>
+                            <input type="text" value="" disabled />
                         </div>
                     </div>
                     <div class="form-grid">
                         <div>
-                            <label for="work-start-date">Start</label>
-                            <input type="month" id="work-start-date">
+                            <label>Start:</label>
+                            <input type="month" value="" disabled />
                         </div>
                         <div>
-                            <label for="work-end-date">End</label>
-                            <input type="month" id="work-end-date">
+                            <label>End:</label>
+                            <input type="month" value="" disabled />
                         </div>
                         <div>
-                            <label for="work-location">Location</label>
-                            <input type="text" id="work-location" placeholder="San Francisco, CA">
+                            <label>Location:</label>
+                            <input type="text" value="" disabled />
                         </div>
                     </div>
                     <div class="form-grid full-width">
-                        <label for="responsibilities">Description of Responsibilities</label>
-                        <textarea id="responsibilities" placeholder="Include relevant responsibilities, achievements, contributions, research, etc."></textarea>
+                        <label>Description of Responsibilities:</label>
+                        <textarea disabled></textarea>
                     </div>                    
                     <div class="form-actions">
                         <button class="delete-btn">Delete</button>
                         <button class="save-btn">Edit</button>
                     </div>
                 </div>
+            
+                <!-- Container for Additional Experience Entries -->
+                <div class="additional-experience-container"></div>
             
                 <!-- Add Another Experience -->
                 <button class="add-experience-btn">+ Add another experience</button>
@@ -230,11 +233,10 @@
                 <h2>Review <span>Links</span></h2>
                 <!-- Editable Form for Links -->
                 <div class="link-form">
-                    <h3>New Link</h3>
                     <div class="form-grid">
                         <div>
-                            <label for="link-type">Link Type</label>
-                            <select id="link-type">
+                            <label>Link Type:</label>
+                            <select disabled>
                                 <option value="" disabled selected>Select an option...</option>
                                 <option value="Portfolio">Portfolio</option>
                                 <option value="LinkedIn">LinkedIn</option>
@@ -243,8 +245,8 @@
                             </select>
                         </div>
                         <div>
-                            <label for="link-url">Link URL</label>
-                            <input type="url" id="link-url" placeholder="ex. www.mylink.com">
+                            <label>Link URL:</label>
+                            <input type="url" value="" disabled />
                         </div>
                     </div>
                     <div class="form-actions">
@@ -252,6 +254,9 @@
                         <button class="save-btn">Edit</button>
                     </div>
                 </div>
+            
+                <!-- Container for Additional Link Entries -->
+                <div class="additional-link-container"></div>
             
                 <!-- Add Another Link -->
                 <button class="add-link-btn">+ Add another link</button>            
@@ -266,27 +271,27 @@
                 <div class="certificate-form">
                     <div class="form-grid">
                         <div>
-                            <label for="certificate-title">Certificate Title</label>
-                            <input type="text" id="certificate-title" placeholder="Ex. AWS Certified Solutions Architect">
+                            <label>Certificate Title:</label>
+                            <input type="text" value="" disabled />
                         </div>
                         <div>
-                            <label for="certificate-organization">Issuing Organization</label>
-                            <input type="text" id="certificate-organization" placeholder="Ex. Amazon Web Services">
+                            <label>Issuing Organization:</label>
+                            <input type="text" value="" disabled />
                         </div>
                     </div>
                     <div class="form-grid">
                         <div>
-                            <label for="certificate-date">Date of Issue</label>
-                            <input type="month" id="certificate-date">
+                            <label>Date of Issue:</label>
+                            <input type="month" value="" disabled />
                         </div>
                         <div>
-                            <label for="certificate-expiry">Expiration Date</label>
-                            <input type="month" id="certificate-expiry" placeholder="Leave blank if no expiry">
+                            <label>Expiration Date:</label>
+                            <input type="month" value="" disabled />
                         </div>
                     </div>
                     <div class="form-grid full-width">
-                        <label for="certificate-description">Description (optional)</label>
-                        <textarea id="certificate-description" placeholder="Add any details about the achievement or certificate."></textarea>
+                        <label>Description:</label>
+                        <textarea disabled></textarea>
                     </div>
                     <div class="form-actions">
                         <button class="delete-btn">Delete</button>
@@ -294,9 +299,12 @@
                     </div>
                 </div>
             
+                <!-- Container for Additional Certificate Entries -->
+                <div class="additional-certificate-container"></div>
+            
                 <!-- Add Another Certificate -->
                 <button class="add-certificate-btn">+ Add another certificate</button>
-
+    
                 <!-- Save and Finish Button -->
                 <button class="save-button">Save and Finish →</button>
             </section>            

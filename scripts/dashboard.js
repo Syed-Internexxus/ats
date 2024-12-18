@@ -53,7 +53,28 @@ document.addEventListener("DOMContentLoaded", () => {
         const section = document.querySelector(selector);
         if (!section || !items.length) return;
 
-        section.innerHTML = ""; // Clear existing content
+        // Determine if selector targets the main section or the additional container
+        const isCertificates = selector === "#certificates";
+        const isLinks = selector === "#links";
+
+        // Choose the correct container based on the section
+        let container;
+        if (isCertificates) {
+            // Initial entry is already present; append to additional container
+            container = section.querySelector(".additional-certificate-container");
+        } else if (isLinks) {
+            // Initial entry is already present; append to additional container
+            container = section.querySelector(".additional-link-container");
+        } else {
+            // Default container
+            container = section;
+        }
+
+        if (!container) {
+            console.error(`Container for dynamic entries not found in ${selector}.`);
+            return;
+        }
+
         items.forEach((item) => {
             const formattedItem = dataFormatter(item);
             const div = document.createElement("div");
@@ -67,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             div.innerHTML = content;
-            section.appendChild(div);
+            container.appendChild(div);
         });
     }
 
@@ -93,25 +114,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Education Section
         populateDynamicSection("#education", data.Education || [], "education-item", `
-            <div class="education-form">
-                <label>School:</label>
-                <input type="text" value="{{School}}" disabled />
-                
-                <label>Degree:</label>
-                <input type="text" value="{{Degree}}" disabled />
-                
-                <label>Location:</label>
-                <input type="text" value="{{Location}}" disabled />
-                
-                <label>Dates:</label>
-                <input type="text" value="{{Dates}}" disabled />
-                
-                <label>GPA:</label>
-                <input type="text" value="{{GPA}}" disabled />
-                
-                <label>Honors:</label>
-                <input type="text" value="{{Honors}}" disabled />
-                
+            <div class="education-item">
+                <div class="form-grid">
+                    <div>
+                        <label>Certificate Title:</label>
+                        <input type="text" value="{{Certificate Title}}" disabled />
+                    </div>
+                    <div>
+                        <label>Issuing Organization:</label>
+                        <input type="text" value="{{Issuing Organization}}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label>Date of Issue:</label>
+                        <input type="month" value="{{Date of Issue}}" disabled />
+                    </div>
+                    <div>
+                        <label>Expiration Date:</label>
+                        <input type="month" value="{{Expiration Date}}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid full-width">
+                    <label>Description:</label>
+                    <textarea disabled>{{Description}}</textarea>
+                </div>
                 <div class="form-actions">
                     <button class="delete-btn">Delete</button>
                     <button class="save-btn">Edit</button>
@@ -122,22 +149,35 @@ document.addEventListener("DOMContentLoaded", () => {
         // Work Experience Section
         const allExperience = [...(data.Experience || []), ...(data["Other Experience"] || [])];
         populateDynamicSection("#work-experience", allExperience, "experience-item", `
-            <div class="work-form">
-                <label>Company:</label>
-                <input type="text" value="{{Company}}" disabled />
-                
-                <label>Title:</label>
-                <input type="text" value="{{Title}}" disabled />
-                
-                <label>Location:</label>
-                <input type="text" value="{{Location}}" disabled />
-                
-                <label>Dates:</label>
-                <input type="text" value="{{Dates}}" disabled />
-                
-                <label>Details:</label>
-                <textarea disabled>{{Details}}</textarea>
-                
+            <div class="experience-item">
+                <div class="form-grid">
+                    <div>
+                        <label>Company:</label>
+                        <input type="text" value="{{Company}}" disabled />
+                    </div>
+                    <div>
+                        <label>Title:</label>
+                        <input type="text" value="{{Title}}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label>Start:</label>
+                        <input type="month" value="{{Start}}" disabled />
+                    </div>
+                    <div>
+                        <label>End:</label>
+                        <input type="month" value="{{End}}" disabled />
+                    </div>
+                    <div>
+                        <label>Location:</label>
+                        <input type="text" value="{{Location}}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid full-width">
+                    <label>Description of Responsibilities:</label>
+                    <textarea disabled>{{Details}}</textarea>
+                </div>                    
                 <div class="form-actions">
                     <button class="delete-btn">Delete</button>
                     <button class="save-btn">Edit</button>
@@ -149,14 +189,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
 
         // Certificates Section
-        populateDynamicSection("#certificates", data.Certificates || [], "certificate-item", `
+        populateDynamicSection("#certificates", data.Certificates || [], "certificate-form", `
             <div class="certificate-form">
-                <label>Name:</label>
-                <input type="text" value="{{Name}}" disabled />
-                
-                <label>Year:</label>
-                <input type="text" value="{{Year}}" disabled />
-                
+                <div class="form-grid">
+                    <div>
+                        <label>Certificate Title:</label>
+                        <input type="text" value="{{Certificate Title}}" disabled />
+                    </div>
+                    <div>
+                        <label>Issuing Organization:</label>
+                        <input type="text" value="{{Issuing Organization}}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label>Date of Issue:</label>
+                        <input type="month" value="{{Date of Issue}}" disabled />
+                    </div>
+                    <div>
+                        <label>Expiration Date:</label>
+                        <input type="month" value="{{Expiration Date}}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid full-width">
+                    <label>Description:</label>
+                    <textarea disabled>{{Description}}</textarea>
+                </div>
                 <div class="form-actions">
                     <button class="delete-btn">Delete</button>
                     <button class="save-btn">Edit</button>
@@ -165,11 +223,20 @@ document.addEventListener("DOMContentLoaded", () => {
         `);
 
         // Links Section
-        populateDynamicSection("#links", data.Links || [], "link-item", `
+        populateDynamicSection("#links", data.Links || [], "link-form", `
             <div class="link-form">
-                <label>URL:</label>
-                <input type="url" value="{{url}}" disabled />
-                
+                <div class="form-grid">
+                    <div>
+                        <label>Link Type:</label>
+                        <select disabled>
+                            <option value="{{Link Type}}" selected>{{Link Type}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Link URL:</label>
+                        <input type="url" value="{{Link URL}}" disabled />
+                    </div>
+                </div>
                 <div class="form-actions">
                     <button class="delete-btn">Delete</button>
                     <button class="save-btn">Edit</button>
@@ -266,9 +333,16 @@ document.addEventListener("DOMContentLoaded", () => {
             education: gatherSectionData(".education-item"),
             workExperience: gatherSectionData(".experience-item"),
             skills: gatherSkills(),
-            certificates: gatherSectionData(".certificate-item"),
-            links: gatherSectionData(".link-item", (link) => ({
-                url: link.querySelector("input").value,
+            certificates: gatherSectionData(".certificate-form", (cert) => ({
+                "Certificate Title": cert.querySelector('input[type="text"]:nth-child(1)').value,
+                "Issuing Organization": cert.querySelector('input[type="text"]:nth-child(2)').value,
+                "Date of Issue": cert.querySelector('input[type="month"]:nth-child(3)').value,
+                "Expiration Date": cert.querySelector('input[type="month"]:nth-child(4)').value,
+                "Description": cert.querySelector('textarea').value,
+            })),
+            links: gatherSectionData(".link-form", (link) => ({
+                "Link Type": link.querySelector('select').value,
+                "Link URL": link.querySelector('input[type="url"]').value,
             })),
         };
     }
@@ -284,14 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function gatherSectionData(selector, customMapper = (el) => el) {
         return Array.from(document.querySelectorAll(selector)).map((el) => {
-            const inputs = el.querySelectorAll("input, textarea, select");
-            return customMapper(
-                Array.from(inputs).reduce((obj, input) => {
-                    const label = input.labels[0]?.innerText || input.placeholder || input.getAttribute("aria-label") || "";
-                    obj[label] = input.value;
-                    return obj;
-                }, {})
-            );
+            return customMapper(el);
         });
     }
 
@@ -361,7 +428,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Delete entry
         if (target.classList.contains("delete-btn")) {
-            const parentEntry = target.closest(".education-entry, .work-entry, .link-entry, .certificate-entry");
+            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
             if (parentEntry) {
                 parentEntry.remove();
             }
@@ -369,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Toggle Save/Edit on each section
         if (target.classList.contains("save-btn")) {
-            const parentEntry = target.closest(".education-entry, .work-entry, .link-entry, .certificate-entry");
+            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
             if (parentEntry) {
                 const inputs = parentEntry.querySelectorAll("input, textarea, select");
                 const isDisabled = Array.from(inputs).some(input => input.disabled);
@@ -393,39 +460,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to Add Education Section
     function addEducationSection(edu = {}) {
-        const educationContainer = document.getElementById("education");
-        if (!educationContainer) return;
+        const educationContainer = document.querySelector(".additional-education-container");
+        if (!educationContainer) {
+            console.error("Additional education container not found.");
+            return;
+        }
 
         const newForm = document.createElement("div");
-        newForm.classList.add("education-entry");
+        newForm.classList.add("education-item");
         newForm.innerHTML = `
             <div class="form-grid">
                 <div>
-                    <label>School Name</label>
-                    <input type="text" placeholder="Stanford University" value="${sanitizeInput(edu["School"] || "")}">
+                    <label>Certificate Title:</label>
+                    <input type="text" value="${sanitizeInput(edu["Certificate Title"] || "")}" disabled />
                 </div>
                 <div>
-                    <label>Degree</label>
-                    <input type="text" placeholder="ex. Bachelors of Science in Biology" value="${sanitizeInput(edu["Degree"] || "")}">
+                    <label>Issuing Organization:</label>
+                    <input type="text" value="${sanitizeInput(edu["Issuing Organization"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid">
                 <div>
-                    <label>Start</label>
-                    <input type="month" value="${sanitizeInput(edu["Dates"]?.split(" to ")[0] || "")}">
+                    <label>Date of Issue:</label>
+                    <input type="month" value="${sanitizeInput(edu["Date of Issue"] || "")}" disabled />
                 </div>
                 <div>
-                    <label>End</label>
-                    <input type="month" value="${sanitizeInput(edu["Dates"]?.split(" to ")[1] || "")}">
-                </div>
-                <div>
-                    <label>GPA</label>
-                    <input type="text" placeholder="ex. 4.0" value="${sanitizeInput(edu["GPA"] || "")}">
+                    <label>Expiration Date:</label>
+                    <input type="month" value="${sanitizeInput(edu["Expiration Date"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid full-width">
-                <label>Details</label>
-                <textarea placeholder="Include relevant coursework, honors, achievements, research, etc.">${sanitizeInput(edu["Details"] || "")}</textarea>
+                <label>Description:</label>
+                <textarea disabled>${sanitizeInput(edu["Description"] || "")}</textarea>
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
@@ -437,39 +503,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to Add Experience Section
     function addExperienceSection(exp = {}) {
-        const experienceContainer = document.getElementById("work-experience");
-        if (!experienceContainer) return;
+        const experienceContainer = document.querySelector(".additional-experience-container");
+        if (!experienceContainer) {
+            console.error("Additional experience container not found.");
+            return;
+        }
 
         const newForm = document.createElement("div");
-        newForm.classList.add("work-entry");
+        newForm.classList.add("experience-item");
         newForm.innerHTML = `
             <div class="form-grid">
                 <div>
-                    <label>Company Name</label>
-                    <input type="text" placeholder="Stripe" value="${sanitizeInput(exp["Company"] || "")}">
+                    <label>Company:</label>
+                    <input type="text" value="${sanitizeInput(exp["Company"] || "")}" disabled />
                 </div>
                 <div>
-                    <label>Title</label>
-                    <input type="text" placeholder="ex. Software Engineer" value="${sanitizeInput(exp["Title"] || "")}">
+                    <label>Title:</label>
+                    <input type="text" value="${sanitizeInput(exp["Title"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid">
                 <div>
-                    <label>Start</label>
-                    <input type="month" value="${sanitizeInput(exp["Dates"]?.split(" to ")[0] || "")}">
+                    <label>Start:</label>
+                    <input type="month" value="${sanitizeInput(exp["Start"] || "")}" disabled />
                 </div>
                 <div>
-                    <label>End</label>
-                    <input type="month" value="${sanitizeInput(exp["Dates"]?.split(" to ")[1] || "")}">
+                    <label>End:</label>
+                    <input type="month" value="${sanitizeInput(exp["End"] || "")}" disabled />
                 </div>
                 <div>
-                    <label>Location</label>
-                    <input type="text" class="location-input" placeholder="San Francisco, CA" value="${sanitizeInput(exp["Location"] || "")}">
+                    <label>Location:</label>
+                    <input type="text" value="${sanitizeInput(exp["Location"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid full-width">
-                <label>Description of Responsibilities</label>
-                <textarea placeholder="Include relevant responsibilities, achievements, contributions, research, etc.">${sanitizeInput(exp["Details"] || "")}</textarea>
+                <label>Description of Responsibilities:</label>
+                <textarea disabled>${sanitizeInput(exp["Description"] || "")}</textarea>
             </div>                    
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
@@ -481,26 +550,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to Add Link Section
     function addLinkSection(link = {}) {
-        const linkContainer = document.getElementById("links");
-        if (!linkContainer) return;
+        const linkContainer = document.querySelector(".additional-link-container");
+        if (!linkContainer) {
+            console.error("Additional link container not found.");
+            return;
+        }
 
         const newForm = document.createElement("div");
-        newForm.classList.add("link-entry");
+        newForm.classList.add("link-form");
         newForm.innerHTML = `
             <div class="form-grid">
                 <div>
-                    <label>Link Type</label>
-                    <select>
-                        <option value="" disabled>Select an option...</option>
-                        <option value="Portfolio" ${link.type === "Portfolio" ? "selected" : ""}>Portfolio</option>
-                        <option value="LinkedIn" ${link.type === "LinkedIn" ? "selected" : ""}>LinkedIn</option>
-                        <option value="GitHub" ${link.type === "GitHub" ? "selected" : ""}>GitHub</option>
-                        <option value="Other" ${link.type === "Other" ? "selected" : ""}>Other</option>
+                    <label>Link Type:</label>
+                    <select disabled>
+                        <option value="${sanitizeInput(link["Link Type"] || "")}" selected>${sanitizeInput(link["Link Type"] || "")}</option>
+                        <option value="Portfolio">Portfolio</option>
+                        <option value="LinkedIn">LinkedIn</option>
+                        <option value="GitHub">GitHub</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 <div>
-                    <label>Link URL</label>
-                    <input type="url" placeholder="ex. www.mylink.com" value="${sanitizeInput(link.url || "")}">
+                    <label>Link URL:</label>
+                    <input type="url" value="${sanitizeInput(link["Link URL"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-actions">
@@ -513,35 +585,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to Add Certificate Section
     function addCertificateSection(cert = {}) {
-        const certificateContainer = document.getElementById("certificates");
-        if (!certificateContainer) return;
+        const certificateContainer = document.querySelector(".additional-certificate-container");
+        if (!certificateContainer) {
+            console.error("Additional certificate container not found.");
+            return;
+        }
 
         const newForm = document.createElement("div");
-        newForm.classList.add("certificate-entry");
+        newForm.classList.add("certificate-form");
         newForm.innerHTML = `
             <div class="form-grid">
                 <div>
-                    <label>Certificate Title</label>
-                    <input type="text" placeholder="Ex. AWS Certified Solutions Architect" value="${sanitizeInput(cert["Certificate Title"] || "")}">
+                    <label>Certificate Title:</label>
+                    <input type="text" value="${sanitizeInput(cert["Certificate Title"] || "")}" disabled />
                 </div>
                 <div>
-                    <label>Issuing Organization</label>
-                    <input type="text" placeholder="Ex. Amazon Web Services" value="${sanitizeInput(cert["Issuing Organization"] || "")}">
+                    <label>Issuing Organization:</label>
+                    <input type="text" value="${sanitizeInput(cert["Issuing Organization"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid">
                 <div>
-                    <label>Date of Issue</label>
-                    <input type="month" value="${sanitizeInput(cert["Date of Issue"] || "")}">
+                    <label>Date of Issue:</label>
+                    <input type="month" value="${sanitizeInput(cert["Date of Issue"] || "")}" disabled />
                 </div>
                 <div>
-                    <label>Expiration Date</label>
-                    <input type="month" placeholder="Leave blank if no expiry" value="${sanitizeInput(cert["Expiration Date"] || "")}">
+                    <label>Expiration Date:</label>
+                    <input type="month" value="${sanitizeInput(cert["Expiration Date"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-grid full-width">
-                <label>Description (optional)</label>
-                <textarea placeholder="Add any details about the achievement or certificate.">${sanitizeInput(cert["Description"] || "")}</textarea>
+                <label>Description:</label>
+                <textarea disabled>${sanitizeInput(cert["Description"] || "")}</textarea>
             </div>
             <div class="form-actions">
                 <button class="delete-btn">Delete</button>
@@ -612,7 +687,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Delete entry
         if (target.classList.contains("delete-btn")) {
-            const parentEntry = target.closest(".education-entry, .work-entry, .link-entry, .certificate-entry");
+            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
             if (parentEntry) {
                 parentEntry.remove();
             }
@@ -620,7 +695,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Toggle Save/Edit on each section
         if (target.classList.contains("save-btn")) {
-            const parentEntry = target.closest(".education-entry, .work-entry, .link-entry, .certificate-entry");
+            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
             if (parentEntry) {
                 const inputs = parentEntry.querySelectorAll("input, textarea, select");
                 const isDisabled = Array.from(inputs).some(input => input.disabled);
