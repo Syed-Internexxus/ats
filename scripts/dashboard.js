@@ -80,8 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 return response.json();
             })
-            .then((data) => {
-                console.log("API Response:", data);
+            .then((responseData) => {
+                console.log("API Response:", responseData);
                 // Process the response as needed
             })
             .catch((error) => {
