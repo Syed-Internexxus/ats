@@ -4,9 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // DOM Elements
     const logoutLink = document.getElementById("logout-link");
+    console.log('logoutLink:', logoutLink);
     const loader = document.getElementById("loader");
+    console.log('loader:', loader);
     const selectTemplate1Btn = document.getElementById("select-template1");
+    console.log('selectTemplate1Btn:', selectTemplate1Btn);
     const selectTemplate2Btn = document.getElementById("select-template2");
+    console.log('selectTemplate2Btn:', selectTemplate2Btn);
 
     // Load User State from LocalStorage
     try {
