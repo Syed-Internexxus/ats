@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add Event Listeners for Template Buttons
     template1Button.addEventListener("click", (e) => {
         e.preventDefault();
-        handleTemplateSelection("template1");
+        handleTemplateSelection("template");
     });
 
     template2Button.addEventListener("click", (e) => {
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("No user data available. Please try again.");
             return;
         }
-
+        console.log("Selected Template:", template);
         // Show loader
         loader.style.display = "block";
 
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const payload = {
             base64_url: userState.base64_file, // Accessing base64-encoded PDF
             job_description: userState.job_description, // Accessing job description
-            template: template, // Selected template
+            template: "template", // Selected template
         };
 
         fetch("https://x4n0kqckl9.execute-api.us-west-1.amazonaws.com/default/resume_ats_analyzer", {
