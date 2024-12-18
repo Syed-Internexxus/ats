@@ -82,11 +82,26 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then((responseData) => {
                 console.log("API Response:", responseData);
-                // Process the response as needed
+                // Hide loader
+                loader.style.display = "none";
+
+                // Parse the body to get pdf_url
+                const data = JSON.parse(responseData.body);
+                const pdfUrl = data.pdf_url;
+
+                // Trigger download of the PDF
+                const link = document.createElement('a');
+                link.href = pdfUrl;
+                link.download = 'resume.pdf'; // Suggested filename
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             })
             .catch((error) => {
                 console.error("Error:", error);
                 alert("An error occurred while processing your request.");
+                // Hide loader
+                loader.style.display = "none";
             })
             .finally(() => {
                 // Always hide the loader
