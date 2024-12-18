@@ -235,4 +235,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   onAuthStateChanged(auth, (user) => {
       updateAuthButton(user);
   });
+
+  // On page load, check if redirected from upload.html or dashboard.html
+  const referrer = document.referrer;
+  if (referrer.includes("upload.html") || referrer.includes("dashboard.html")) {
+    // Clear session and local storage data
+    localStorage.removeItem("dashboardData");
+    localStorage.removeItem("selectedTemplate");
+    sessionStorage.removeItem("userState");
+
+    // Sign out from Firebase authentication
+    auth.signOut().then(() => {
+      console.log("User signed out.");
+    }).catch((error) => {
+      console.error("Sign out error:", error);
+    });
+
+    // Show the login modal
+    showModal();
+  }
 });
