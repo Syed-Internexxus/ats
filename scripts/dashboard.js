@@ -39,6 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = localStorage.getItem("dashboardData");
         if (data) {
             userState = JSON.parse(data);
+
+            // Check if statuscode is 500
+            if (userState.statuscode === 500) {
+                localStorage.removeItem("dashboardData");
+                alert("Session expired. Redirecting to upload page.");
+                window.location.href = "upload.html";
+            }
         } else {
             throw new Error("No user data found.");
         }
@@ -306,8 +313,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Logout Function
     function handleLogout() {
-        localStorage.removeItem("dashboardData"); // Clear stored user data
-        localStorage.removeItem("selectedTemplate"); // Clear selected template
+        // Clear all user-related data
+        localStorage.removeItem("dashboardData");
+        localStorage.removeItem("selectedTemplate");
+
+        // Inform the user and redirect to index.html
         alert("You have been logged out.");
         window.location.href = "index.html";
     }
