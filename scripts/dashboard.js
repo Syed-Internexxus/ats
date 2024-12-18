@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebarItems = document.querySelectorAll(".sidebar-item");
     const formSections = document.querySelectorAll(".form-section");
 
+    // Next Buttons
+    const nextButtons = document.querySelectorAll(".next-button");
+
     // Load User State from LocalStorage
     try {
         const data = localStorage.getItem("dashboardData");
@@ -93,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
 
         // Skills Section
-        document.getElementById("skills").value = data["Core Skills"] || "";
+        document.getElementById("new-skill").value = data["Core Skills"] || "";
 
         // Certificates Section
         populateDynamicSection("#certificates", data.Certificates, "certificate-item", `
@@ -106,9 +109,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Links Section
         populateDynamicSection("#links", data.Links, "link-item", `
             <div class="link-form">
-                <label>URL:</label> <input type="url" value="{{}}" />
+                <label>URL:</label> <input type="url" value="{{url}}" />
             </div>
-        `, (url) => ({ "": url }));
+        `);
     }
 
     // Event Handlers
@@ -125,10 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (userState) {
                 populateFormFields(userState);
                 resumeSelection.style.display = "none";
-                profileFormSection.style.display = "block";
+                profileFormSection.style.display = "flex"; // Changed to flex for layout consistency
 
                 // Update heading text
                 mainHeading.textContent = "Let's make sure this is right, cool?";
+
+                // Initialize the first form section as active
+                const firstSection = formSections[0];
+                navigateToSection(firstSection);
             } else {
                 alert("Failed to load user data. Please try again.");
             }
@@ -140,13 +147,28 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebarItems.forEach((item) => {
         item.addEventListener("click", (e) => {
             e.preventDefault();
-            const targetSection = document.querySelector(item.getAttribute("href"));
-            navigateToSection(targetSection);
+            const targetSelector = item.getAttribute("href");
+            const targetSection = document.querySelector(targetSelector);
+            if (targetSection) {
+                navigateToSection(targetSection);
+            }
+        });
+    });
+
+    nextButtons.forEach((button, index) => {
+        button.addEventListener("click", () => {
+            const currentSection = formSections[index];
+            const nextSection = formSections[index + 1];
+            if (nextSection) {
+                navigateToSection(nextSection);
+            }
         });
     });
 
     // Navigation
     function navigateToSection(section) {
+        if (!section) return;
+
         formSections.forEach((sec) => {
             sec.classList.remove("active");
             sec.style.display = "none"; // Hide all sections
@@ -156,9 +178,10 @@ document.addEventListener("DOMContentLoaded", () => {
         section.style.display = "block"; // Show the selected section
 
         sidebarItems.forEach((item) => item.classList.remove("active"));
-        document
-            .querySelector(`.sidebar-item[href="#${section.id}"]`)
-            .classList.add("active");
+        const activeSidebarItem = document.querySelector(`.sidebar-item[href="#${section.id}"]`);
+        if (activeSidebarItem) {
+            activeSidebarItem.classList.add("active");
+        }
     }
 
     // Logout
@@ -188,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             education: gatherSectionData("#education .education-item"),
             workExperience: gatherSectionData("#work-experience .experience-item"),
-            skills: document.getElementById("skills")?.value || "",
+            skills: document.getElementById("new-skill")?.value || "",
             certificates: gatherSectionData("#certificates .certificate-item"),
             links: gatherSectionData("#links .link-item", (link) => ({
                 url: link.querySelector("input").value,
@@ -198,10 +221,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function gatherSectionData(selector, customMapper = (el) => el) {
         return Array.from(document.querySelectorAll(selector)).map((el) => {
-            const inputs = el.querySelectorAll("input, textarea");
+            const inputs = el.querySelectorAll("input, textarea, select");
             return customMapper(
                 Array.from(inputs).reduce((obj, input) => {
-                    obj[input.placeholder || input.labels[0]?.innerText] = input.value;
+                    const label = input.labels[0]?.innerText || input.placeholder || input.getAttribute("aria-label") || "";
+                    obj[label] = input.value;
                     return obj;
                 }, {})
             );
