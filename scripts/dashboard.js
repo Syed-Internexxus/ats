@@ -1,3 +1,5 @@
+// JavaScript code for dashboard functionality
+
 document.addEventListener("DOMContentLoaded", () => {
     // Variables
     let userState = null;
@@ -21,18 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Skills Tags Container
     const skillsTagsContainer = document.querySelector(".skills-tags");
-
-    if (!skillsTagsContainer) {
-        console.error("Element with class 'skills-tags' not found. Please ensure it exists in the HTML.");
-    }
-
-    // Define newSkillInput in the outer scope to avoid ReferenceError
     const newSkillInput = document.getElementById("new-skill");
-    if (newSkillInput) {
-        newSkillInput.value = ""; // Clear any existing value
-    } else {
-        console.error("Element with id 'new-skill' not found. Please ensure it exists in the HTML.");
-    }
 
     // Load User State from LocalStorage
     try {
@@ -48,226 +39,83 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "upload.html";
     }
 
-    // Define populateDynamicSection
-    function populateDynamicSection(selector, items = [], className, template, dataFormatter = (item) => item) {
-        const section = document.querySelector(selector);
-        if (!section || !items.length) return;
+    // Populate Form Fields
+    function populateData(userState) {
+        document.getElementById("firstName").value = userState["First Name"] || "";
+        document.getElementById("lastName").value = userState["Last Name"] || "";
+        document.getElementById("title").value = userState["Title"] || "";
+        document.getElementById("contact").value = userState["Contact"] || "";
 
-        // Determine if selector targets the main section or the additional container
-        const isCertificates = selector === "#certificates";
-        const isLinks = selector === "#links";
+        populateDynamicSection("#linksContainer", userState.Links || [], "link-form", `
+            <div class="link-form">
+                <input type="url" value="{{link}}" class="form-control" placeholder="Link" disabled />
+                <button class="delete-btn">Delete</button>
+            </div>
+        `);
 
-        // Choose the correct container based on the section
-        let container;
-        if (isCertificates) {
-            // Initial entry is already present; append to additional container
-            container = section.querySelector(".additional-certificate-container");
-        } else if (isLinks) {
-            // Initial entry is already present; append to additional container
-            container = section.querySelector(".additional-link-container");
-        } else {
-            // Default container
-            container = section;
-        }
+        populateDynamicSection("#educationContainer", userState.Education || [], "education-item", `
+            <div class="education-item">
+                <input type="text" value="{{School}}" placeholder="School" class="form-control" disabled />
+                <input type="text" value="{{Degree}}" placeholder="Degree" class="form-control" disabled />
+                <input type="text" value="{{Location}}" placeholder="Location" class="form-control" disabled />
+                <input type="text" value="{{Dates}}" placeholder="Dates" class="form-control" disabled />
+                <button class="delete-btn">Delete</button>
+            </div>
+        `);
 
-        if (!container) {
-            console.error(`Container for dynamic entries not found in ${selector}.`);
-            return;
-        }
+        populateDynamicSection("#experienceContainer", userState.Experience || [], "experience-item", `
+            <div class="experience-item">
+                <input type="text" value="{{Company}}" placeholder="Company" class="form-control" disabled />
+                <input type="text" value="{{Title}}" placeholder="Title" class="form-control" disabled />
+                <textarea placeholder="Details" class="form-control" disabled>{{Details}}</textarea>
+                <button class="delete-btn">Delete</button>
+            </div>
+        `);
 
+        populateDynamicSection("#certificatesContainer", userState.Certificates || [], "certificate-form", `
+            <div class="certificate-form">
+                <input type="text" value="{{Name}}" placeholder="Certificate Name" class="form-control" disabled />
+                <input type="text" value="{{Year}}" placeholder="Year" class="form-control" disabled />
+                <button class="delete-btn">Delete</button>
+            </div>
+        `);
+    }
+
+    function populateDynamicSection(selector, items, className, template) {
+        const container = document.querySelector(selector);
+        container.innerHTML = "";
         items.forEach((item) => {
-            const formattedItem = dataFormatter(item);
             const div = document.createElement("div");
             div.className = className;
-
-            // Replace placeholders in the template with actual data
             let content = template;
-            for (const key in formattedItem) {
-                const value = formattedItem[key] || ""; // Avoid undefined values
-                content = content.replace(new RegExp(`{{${key}}}`, "g"), sanitizeInput(value));
+            for (const key in item) {
+                content = content.replace(new RegExp(`{{${key}}}`, "g"), sanitizeInput(item[key] || ""));
             }
-
             div.innerHTML = content;
             container.appendChild(div);
         });
     }
 
-    // Populate Form Fields
-    function populateFormFields(data) {
-        console.log("Populating form fields with data:", data);
-
-        // Personal Details
-        document.getElementById("first-name").value = data["First Name"] || "";
-        document.getElementById("last-name").value = data["Last Name"] || "";
-
-        // Professional Summary (if exists)
-        const summaryInput = document.getElementById("summary");
-        if (summaryInput) {
-            summaryInput.value = data["Professional Summary"] || "";
-        }
-
-        // Personal Location (Unique ID)
-        const personalLocation = document.getElementById("personal-location");
-        if (personalLocation) {
-            personalLocation.value = data["Location"] || "";
-        }
-
-        // Education Section
-        populateDynamicSection("#education", data.Education || [], "education-item", `
-            <div class="education-item">
-                <div class="form-grid">
-                    <div>
-                        <label>Certificate Title:</label>
-                        <input type="text" value="{{Certificate Title}}" disabled />
-                    </div>
-                    <div>
-                        <label>Issuing Organization:</label>
-                        <input type="text" value="{{Issuing Organization}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div>
-                        <label>Date of Issue:</label>
-                        <input type="month" value="{{Date of Issue}}" disabled />
-                    </div>
-                    <div>
-                        <label>Expiration Date:</label>
-                        <input type="month" value="{{Expiration Date}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid full-width">
-                    <label>Description:</label>
-                    <textarea disabled>{{Description}}</textarea>
-                </div>
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `);
-
-        // Work Experience Section
-        const allExperience = [...(data.Experience || []), ...(data["Other Experience"] || [])];
-        populateDynamicSection("#work-experience", allExperience, "experience-item", `
-            <div class="experience-item">
-                <div class="form-grid">
-                    <div>
-                        <label>Company:</label>
-                        <input type="text" value="{{Company}}" disabled />
-                    </div>
-                    <div>
-                        <label>Title:</label>
-                        <input type="text" value="{{Title}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div>
-                        <label>Start:</label>
-                        <input type="month" value="{{Start}}" disabled />
-                    </div>
-                    <div>
-                        <label>End:</label>
-                        <input type="month" value="{{End}}" disabled />
-                    </div>
-                    <div>
-                        <label>Location:</label>
-                        <input type="text" value="{{Location}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid full-width">
-                    <label>Description of Responsibilities:</label>
-                    <textarea disabled>{{Details}}</textarea>
-                </div>                    
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `, (item) => ({
-            ...item,
-            Details: item.Details ? item.Details.join("\n") : "",
-        }));
-
-        // Certificates Section
-        populateDynamicSection("#certificates", data.Certificates || [], "certificate-form", `
-            <div class="certificate-form">
-                <div class="form-grid">
-                    <div>
-                        <label>Certificate Title:</label>
-                        <input type="text" value="{{Certificate Title}}" disabled />
-                    </div>
-                    <div>
-                        <label>Issuing Organization:</label>
-                        <input type="text" value="{{Issuing Organization}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div>
-                        <label>Date of Issue:</label>
-                        <input type="month" value="{{Date of Issue}}" disabled />
-                    </div>
-                    <div>
-                        <label>Expiration Date:</label>
-                        <input type="month" value="{{Expiration Date}}" disabled />
-                    </div>
-                </div>
-                <div class="form-grid full-width">
-                    <label>Description:</label>
-                    <textarea disabled>{{Description}}</textarea>
-                </div>
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `);
-
-        // Links Section
-        populateDynamicSection("#links", data.Links || [], "link-form", `
-            <div class="link-form">
-                <div class="form-grid">
-                    <div>
-                        <label>Link Type:</label>
-                        <select disabled>
-                            <option value="{{Link Type}}" selected>{{Link Type}}</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Link URL:</label>
-                        <input type="url" value="{{Link URL}}" disabled />
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button class="delete-btn">Delete</button>
-                    <button class="save-btn">Edit</button>
-                </div>
-            </div>
-        `);
+    function sanitizeInput(str) {
+        if (typeof str !== "string") return "";
+        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Event Handlers
-    logoutLink.addEventListener("click", handleLogout);
-
+    // Resume Selection Logic
     selectResumeButtons.forEach((button) => {
         button.addEventListener("click", (e) => {
             const resumeOption = e.target.closest(".resume-option");
             if (!resumeOption) return;
 
-            const format = resumeOption.dataset.format;
-            selectedTemplate = format;
-
-            // Store selected template in localStorage
+            selectedTemplate = resumeOption.dataset.format;
             localStorage.setItem("selectedTemplate", selectedTemplate);
 
             if (userState) {
-                populateFormFields(userState);
+                populateData(userState);
                 resumeSelection.style.display = "none";
-                profileFormSection.style.display = "flex"; // Changed to flex for layout consistency
+                profileFormSection.style.display = "flex";
 
-                // Update heading text
-                mainHeading.textContent = "Let's make sure this is right, cool?";
-
-                // Initialize the first form section as active
+                mainHeading.textContent = "Let's make sure this is right, shall we?";
                 showSection(0);
             } else {
                 alert("Failed to load user data. Please try again.");
@@ -275,28 +123,29 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    saveFinishButton.addEventListener("click", handleSaveAndFinish);
+    // Handle Save/Edit and Delete Events
+    document.body.addEventListener("click", (event) => {
+        const target = event.target;
 
+        if (target.classList.contains("delete-btn")) {
+            target.parentElement.remove();
+        } else if (target.classList.contains("save-btn")) {
+            const container = target.closest(".form-section");
+            const inputs = container.querySelectorAll("input, textarea");
+            const isDisabled = inputs[0].disabled;
+            inputs.forEach((input) => (input.disabled = !isDisabled));
+            target.textContent = isDisabled ? "Save" : "Edit";
+        }
+    });
+
+    // Sidebar Navigation
     sidebarItems.forEach((item, index) => {
-        item.addEventListener("click", (e) => {
-            e.preventDefault();
-            showSection(index);
-        });
+        item.addEventListener("click", () => showSection(index));
     });
 
-    nextButtons.forEach((button, index) => {
-        button.addEventListener("click", () => {
-            if (index < formSections.length - 1) {
-                showSection(index + 1);
-            }
-        });
-    });
-
-    // Navigation Function
     function showSection(index) {
         formSections.forEach((section, i) => {
             section.classList.toggle("active", i === index);
-            section.style.display = i === index ? "block" : "none";
         });
         sidebarItems.forEach((item, i) => {
             item.classList.toggle("active", i === index);
@@ -304,445 +153,49 @@ document.addEventListener("DOMContentLoaded", () => {
         currentSectionIndex = index;
     }
 
-    // Logout Function
-    function handleLogout() {
-        localStorage.removeItem("dashboardData"); // Clear stored user data
-        localStorage.removeItem("selectedTemplate"); // Clear selected template
-        alert("You have been logged out.");
-        window.location.href = "index.html";
-    }
-
-    // Save and Finish Function
-    async function handleSaveAndFinish() {
+    // Save and Finish Functionality
+    saveFinishButton.addEventListener("click", () => {
         const userData = gatherFormData();
         console.log("Final User Data:", userData);
+        alert("Save and Finish functionality under development.");
+    });
 
-        // TODO: Implement functionality to generate and download the final resume here
-        alert("Save and Finish functionality is under development!");
-    }
-
-    // Gather Form Data
     function gatherFormData() {
         return {
             personalDetails: {
-                firstName: document.getElementById("first-name").value,
-                lastName: document.getElementById("last-name").value,
-                professionalSummary: document.getElementById("summary")?.value || "",
-                location: document.getElementById("personal-location")?.value || "",
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                title: document.getElementById("title").value,
+                contact: document.getElementById("contact").value,
             },
-            education: gatherSectionData(".education-item"),
-            workExperience: gatherSectionData(".experience-item"),
-            skills: gatherSkills(),
-            certificates: gatherSectionData(".certificate-form", (cert) => ({
-                "Certificate Title": cert.querySelector('input[type="text"]:nth-child(1)').value,
-                "Issuing Organization": cert.querySelector('input[type="text"]:nth-child(2)').value,
-                "Date of Issue": cert.querySelector('input[type="month"]:nth-child(3)').value,
-                "Expiration Date": cert.querySelector('input[type="month"]:nth-child(4)').value,
-                "Description": cert.querySelector('textarea').value,
-            })),
-            links: gatherSectionData(".link-form", (link) => ({
-                "Link Type": link.querySelector('select').value,
-                "Link URL": link.querySelector('input[type="url"]').value,
-            })),
+            links: gatherDynamicData(".link-form"),
+            education: gatherDynamicData(".education-item"),
+            experience: gatherDynamicData(".experience-item"),
+            certificates: gatherDynamicData(".certificate-form"),
         };
     }
 
-    function gatherSkills() {
-        const skills = [];
-        const skillTags = document.querySelectorAll(".skills-tags span");
-        skillTags.forEach(tag => {
-            skills.push(tag.textContent.replace("×", "").trim());
-        });
-        return skills;
-    }
-
-    function gatherSectionData(selector, customMapper = (el) => el) {
-        return Array.from(document.querySelectorAll(selector)).map((el) => {
-            return customMapper(el);
+    function gatherDynamicData(selector) {
+        const elements = document.querySelectorAll(selector);
+        return Array.from(elements).map((el) => {
+            const inputs = el.querySelectorAll("input, textarea");
+            const data = {};
+            inputs.forEach((input) => {
+                data[input.placeholder] = input.value;
+            });
+            return data;
         });
     }
 
-    // Skills Section Event Listeners
-    if (newSkillInput) {
-        newSkillInput.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" && newSkillInput.value.trim() !== "") {
-                event.preventDefault();
-                addSkillTag(newSkillInput.value.trim());
-                newSkillInput.value = "";
-            }
-        });
+    // Initialize Form
+    if (userState) {
+        populateData(userState);
     }
 
-    // Function to Add a Skill Tag
-    function addSkillTag(skill) {
-        if (!skillsTagsContainer) {
-            console.error("skillsTagsContainer is not initialized.");
-            return;
-        }
-
-        const tag = document.createElement("span");
-        tag.classList.add("skill-tag");
-        tag.textContent = skill;
-
-        const removeButton = document.createElement("button");
-        removeButton.textContent = "×";
-        removeButton.classList.add("remove-skill");
-        Object.assign(removeButton.style, {
-            background: "none",
-            border: "none",
-            color: "#fff",
-            cursor: "pointer",
-            marginLeft: "8px"
-        });
-        removeButton.addEventListener("click", () => {
-            skillsTagsContainer.removeChild(tag);
-        });
-
-        tag.appendChild(removeButton);
-        skillsTagsContainer.appendChild(tag);
-    }
-
-    // Document Body Click Event Listener for Dynamic Elements
-    document.body.addEventListener("click", async (event) => {
-        const target = event.target;
-
-        // Add new education entry
-        if (target.classList.contains("add-education-btn")) {
-            addEducationSection();
-        }
-
-        // Add new work experience entry
-        if (target.classList.contains("add-experience-btn")) {
-            addExperienceSection();
-        }
-
-        // Add new link entry
-        if (target.classList.contains("add-link-btn")) {
-            addLinkSection();
-        }
-
-        // Add new certificate entry
-        if (target.classList.contains("add-certificate-btn")) {
-            addCertificateSection();
-        }
-
-        // Delete entry
-        if (target.classList.contains("delete-btn")) {
-            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
-            if (parentEntry) {
-                parentEntry.remove();
-            }
-        }
-
-        // Toggle Save/Edit on each section
-        if (target.classList.contains("save-btn")) {
-            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
-            if (parentEntry) {
-                const inputs = parentEntry.querySelectorAll("input, textarea, select");
-                const isDisabled = Array.from(inputs).some(input => input.disabled);
-
-                if (isDisabled) {
-                    // Currently in 'view' mode -> Switch to 'edit' mode
-                    inputs.forEach((input) => {
-                        input.removeAttribute("disabled");
-                    });
-                    target.textContent = "Save";
-                } else {
-                    // Currently in 'edit' mode -> Switch to 'view' mode
-                    inputs.forEach((input) => {
-                        input.setAttribute("disabled", true);
-                    });
-                    target.textContent = "Edit";
-                }
-            }
-        }
+    // Logout Functionality
+    logoutLink.addEventListener("click", () => {
+        localStorage.removeItem("dashboardData");
+        alert("Logged out successfully.");
+        window.location.href = "index.html";
     });
-
-    // Function to Add Education Section
-    function addEducationSection(edu = {}) {
-        const educationContainer = document.querySelector(".additional-education-container");
-        if (!educationContainer) {
-            console.error("Additional education container not found.");
-            return;
-        }
-
-        const newForm = document.createElement("div");
-        newForm.classList.add("education-item");
-        newForm.innerHTML = `
-            <div class="form-grid">
-                <div>
-                    <label>Certificate Title:</label>
-                    <input type="text" value="${sanitizeInput(edu["Certificate Title"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>Issuing Organization:</label>
-                    <input type="text" value="${sanitizeInput(edu["Issuing Organization"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-grid">
-                <div>
-                    <label>Date of Issue:</label>
-                    <input type="month" value="${sanitizeInput(edu["Date of Issue"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>Expiration Date:</label>
-                    <input type="month" value="${sanitizeInput(edu["Expiration Date"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-grid full-width">
-                <label>Description:</label>
-                <textarea disabled>${sanitizeInput(edu["Description"] || "")}</textarea>
-            </div>
-            <div class="form-actions">
-                <button class="delete-btn">Delete</button>
-                <button class="save-btn">Edit</button>
-            </div>
-        `;
-        educationContainer.appendChild(newForm);
-    }
-
-    // Function to Add Experience Section
-    function addExperienceSection(exp = {}) {
-        const experienceContainer = document.querySelector(".additional-experience-container");
-        if (!experienceContainer) {
-            console.error("Additional experience container not found.");
-            return;
-        }
-
-        const newForm = document.createElement("div");
-        newForm.classList.add("experience-item");
-        newForm.innerHTML = `
-            <div class="form-grid">
-                <div>
-                    <label>Company:</label>
-                    <input type="text" value="${sanitizeInput(exp["Company"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>Title:</label>
-                    <input type="text" value="${sanitizeInput(exp["Title"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-grid">
-                <div>
-                    <label>Start:</label>
-                    <input type="month" value="${sanitizeInput(exp["Start"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>End:</label>
-                    <input type="month" value="${sanitizeInput(exp["End"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>Location:</label>
-                    <input type="text" value="${sanitizeInput(exp["Location"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-grid full-width">
-                <label>Description of Responsibilities:</label>
-                <textarea disabled>${sanitizeInput(exp["Description"] || "")}</textarea>
-            </div>                    
-            <div class="form-actions">
-                <button class="delete-btn">Delete</button>
-                <button class="save-btn">Edit</button>
-            </div>
-        `;
-        experienceContainer.appendChild(newForm);
-    }
-
-    // Function to Add Link Section
-    function addLinkSection(link = {}) {
-        const linkContainer = document.querySelector(".additional-link-container");
-        if (!linkContainer) {
-            console.error("Additional link container not found.");
-            return;
-        }
-
-        const newForm = document.createElement("div");
-        newForm.classList.add("link-form");
-        newForm.innerHTML = `
-            <div class="form-grid">
-                <div>
-                    <label>Link Type:</label>
-                    <select disabled>
-                        <option value="${sanitizeInput(link["Link Type"] || "")}" selected>${sanitizeInput(link["Link Type"] || "")}</option>
-                        <option value="Portfolio">Portfolio</option>
-                        <option value="LinkedIn">LinkedIn</option>
-                        <option value="GitHub">GitHub</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Link URL:</label>
-                    <input type="url" value="${sanitizeInput(link["Link URL"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-actions">
-                <button class="delete-btn">Delete</button>
-                <button class="save-btn">Edit</button>
-            </div>
-        `;
-        linkContainer.appendChild(newForm);
-    }
-
-    // Function to Add Certificate Section
-    function addCertificateSection(cert = {}) {
-        const certificateContainer = document.querySelector(".additional-certificate-container");
-        if (!certificateContainer) {
-            console.error("Additional certificate container not found.");
-            return;
-        }
-
-        const newForm = document.createElement("div");
-        newForm.classList.add("certificate-form");
-        newForm.innerHTML = `
-            <div class="form-grid">
-                <div>
-                    <label>Certificate Title:</label>
-                    <input type="text" value="${sanitizeInput(cert["Certificate Title"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>Issuing Organization:</label>
-                    <input type="text" value="${sanitizeInput(cert["Issuing Organization"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-grid">
-                <div>
-                    <label>Date of Issue:</label>
-                    <input type="month" value="${sanitizeInput(cert["Date of Issue"] || "")}" disabled />
-                </div>
-                <div>
-                    <label>Expiration Date:</label>
-                    <input type="month" value="${sanitizeInput(cert["Expiration Date"] || "")}" disabled />
-                </div>
-            </div>
-            <div class="form-grid full-width">
-                <label>Description:</label>
-                <textarea disabled>${sanitizeInput(cert["Description"] || "")}</textarea>
-            </div>
-            <div class="form-actions">
-                <button class="delete-btn">Delete</button>
-                <button class="save-btn">Edit</button>
-            </div>
-        `;
-        certificateContainer.appendChild(newForm);
-    }
-
-    // Function to Sanitize Input to Prevent XSS
-    function sanitizeInput(str) {
-        if (typeof str !== "string") return "";
-        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    // Function to Add a Skill Tag
-    function addSkillTag(skill) {
-        if (!skillsTagsContainer) {
-            console.error("skillsTagsContainer is not initialized.");
-            return;
-        }
-
-        const tag = document.createElement("span");
-        tag.classList.add("skill-tag");
-        tag.textContent = skill;
-
-        const removeButton = document.createElement("button");
-        removeButton.textContent = "×";
-        removeButton.classList.add("remove-skill");
-        Object.assign(removeButton.style, {
-            background: "none",
-            border: "none",
-            color: "#fff",
-            cursor: "pointer",
-            marginLeft: "8px"
-        });
-        removeButton.addEventListener("click", () => {
-            skillsTagsContainer.removeChild(tag);
-        });
-
-        tag.appendChild(removeButton);
-        skillsTagsContainer.appendChild(tag);
-    }
-
-    // Document Body Click Event Listener for Dynamic Elements
-    document.body.addEventListener("click", async (event) => {
-        const target = event.target;
-
-        // Add new education entry
-        if (target.classList.contains("add-education-btn")) {
-            addEducationSection();
-        }
-
-        // Add new work experience entry
-        if (target.classList.contains("add-experience-btn")) {
-            addExperienceSection();
-        }
-
-        // Add new link entry
-        if (target.classList.contains("add-link-btn")) {
-            addLinkSection();
-        }
-
-        // Add new certificate entry
-        if (target.classList.contains("add-certificate-btn")) {
-            addCertificateSection();
-        }
-
-        // Delete entry
-        if (target.classList.contains("delete-btn")) {
-            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
-            if (parentEntry) {
-                parentEntry.remove();
-            }
-        }
-
-        // Toggle Save/Edit on each section
-        if (target.classList.contains("save-btn")) {
-            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
-            if (parentEntry) {
-                const inputs = parentEntry.querySelectorAll("input, textarea, select");
-                const isDisabled = Array.from(inputs).some(input => input.disabled);
-
-                if (isDisabled) {
-                    // Currently in 'view' mode -> Switch to 'edit' mode
-                    inputs.forEach((input) => {
-                        input.removeAttribute("disabled");
-                    });
-                    target.textContent = "Save";
-                } else {
-                    // Currently in 'edit' mode -> Switch to 'view' mode
-                    inputs.forEach((input) => {
-                        input.setAttribute("disabled", true);
-                    });
-                    target.textContent = "Edit";
-                }
-            }
-        }
-    });
-
-    // Function to Show Specific Section
-    function showSection(index) {
-        formSections.forEach((section, i) => {
-            section.classList.toggle("active", i === index);
-            section.style.display = i === index ? "block" : "none";
-        });
-        sidebarItems.forEach((item, i) => {
-            item.classList.toggle("active", i === index);
-        });
-        currentSectionIndex = index;
-    }
-
-    // Initialize Skills Tags Container
-    if (!skillsTagsContainer) {
-        console.error("Element with class 'skills-tags' not found. Please ensure it exists in the HTML.");
-    }
-
-    // Skills Section Event Listeners
-    if (newSkillInput) {
-        newSkillInput.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" && newSkillInput.value.trim() !== "") {
-                event.preventDefault();
-                addSkillTag(newSkillInput.value.trim());
-                newSkillInput.value = "";
-            }
-        });
-    }
-
 });

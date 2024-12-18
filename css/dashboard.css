@@ -269,7 +269,7 @@ textarea:focus {
 }
 
 /* Add Buttons */
-.add-experience-btn, .add-education-btn, .add-link-btn {
+.add-experience-btn, .add-education-btn, .add-link-btn, .add-certificate-btn {
   display: block;
   width: 100%;
   background: #f0f0f0;
@@ -283,7 +283,7 @@ textarea:focus {
   margin-bottom: 1rem;
 }
 
-.add-experience-btn:hover, .add-education-btn:hover, .add-link-btn:hover {
+.add-experience-btn:hover, .add-education-btn:hover, .add-link-btn:hover, .add-certificate-btn:hover {
   background: #e6f4ff;
 }
 
