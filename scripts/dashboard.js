@@ -22,16 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Skills Tags Container
     const skillsTagsContainer = document.querySelector(".skills-tags");
 
-    if (!skillsTagsContainer) {
-        console.error("Element with class 'skills-tags' not found. Please ensure it exists in the HTML.");
-    }
-
-    // Define newSkillInput in the outer scope to avoid ReferenceError
+    // Define newSkillInput
     const newSkillInput = document.getElementById("new-skill");
     if (newSkillInput) {
         newSkillInput.value = ""; // Clear any existing value
     } else {
-        console.error("Element with id 'new-skill' not found. Please ensure it exists in the HTML.");
+        console.error("Element with id 'new-skill' not found.");
     }
 
     // Load User State from LocalStorage
@@ -40,8 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data) {
             userState = JSON.parse(data);
 
-            // Check if statuscode is 500
-            if (userState.statuscode === 500) {
+            // Check if statusCode is 500
+            if (userState.statusCode === 500) {
                 localStorage.removeItem("dashboardData");
                 alert("Session expired. Redirecting to upload page.");
                 window.location.href = "upload.html";
@@ -55,49 +51,54 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "upload.html";
     }
 
-    // Define populateDynamicSection
-    function populateDynamicSection(selector, items = [], className, template, dataFormatter = (item) => item) {
-        const section = document.querySelector(selector);
-        if (!section || !items.length) return;
+    // Event Listeners
+    logoutLink.addEventListener("click", handleLogout);
 
-        // Determine if selector targets the main section or the additional container
-        const isCertificates = selector === "#certificates";
-        const isLinks = selector === "#links";
+    selectResumeButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            const resumeOption = e.target.closest(".resume-option");
+            if (!resumeOption) return;
 
-        // Choose the correct container based on the section
-        let container;
-        if (isCertificates) {
-            // Initial entry is already present; append to additional container
-            container = section.querySelector(".additional-certificate-container");
-        } else if (isLinks) {
-            // Initial entry is already present; append to additional container
-            container = section.querySelector(".additional-link-container");
-        } else {
-            // Default container
-            container = section;
-        }
+            const format = resumeOption.dataset.format;
+            selectedTemplate = format;
 
-        if (!container) {
-            console.error(`Container for dynamic entries not found in ${selector}.`);
-            return;
-        }
+            // Store selected template in localStorage
+            localStorage.setItem("selectedTemplate", selectedTemplate);
 
-        items.forEach((item) => {
-            const formattedItem = dataFormatter(item);
-            const div = document.createElement("div");
-            div.className = className;
+            if (userState) {
+                populateFormFields(userState);
+                resumeSelection.style.display = "none";
+                profileFormSection.style.display = "block"; // Changed to block
 
-            // Replace placeholders in the template with actual data
-            let content = template;
-            for (const key in formattedItem) {
-                const value = formattedItem[key] || ""; // Avoid undefined values
-                content = content.replace(new RegExp(`{{${key}}}`, "g"), sanitizeInput(value));
+                // Update heading text
+                mainHeading.textContent = "Let's make sure this is right, cool?";
+
+                // Initialize the first form section as active
+                showSection(0);
+            } else {
+                alert("Failed to load user data. Please try again.");
             }
-
-            div.innerHTML = content;
-            container.appendChild(div);
         });
-    }
+    });
+
+    saveFinishButton.addEventListener("click", handleSaveAndFinish);
+
+    sidebarItems.forEach((item, index) => {
+        item.addEventListener("click", (e) => {
+            e.preventDefault();
+            showSection(index);
+        });
+    });
+
+    nextButtons.forEach((button, index) => {
+        button.addEventListener("click", () => {
+            if (index < formSections.length - 1) {
+                showSection(index + 1);
+            }
+        });
+    });
+
+    // Function Definitions
 
     // Populate Form Fields
     function populateFormFields(data) {
@@ -139,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function populateLinks(links) {
         // Populate existing link fields
         if (links[0]) {
-            document.querySelector("#links input[type='url']").value = sanitizeInput(links[0] || "");
+            document.querySelector("#links input[name='link-url']").value = sanitizeInput(links[0] || "");
         }
 
         // Add additional link entries
@@ -153,11 +154,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // Populate existing education fields
         if (educationList[0]) {
             const edu = educationList[0];
-            document.querySelector("#education input[name='degree-title']").value = sanitizeInput(edu.Degree || "");
-            document.querySelector("#education input[name='school']").value = sanitizeInput(edu.School || "");
-            document.querySelector("#education input[name='dates']").value = sanitizeInput(edu.Dates || "");
-            document.querySelector("#education input[name='location']").value = sanitizeInput(edu.Location || "");
-            document.querySelector("#education textarea[name='description']").value = sanitizeInput(edu.Honors || "");
+            const section = document.querySelector("#education .education-item");
+            if (section) {
+                section.querySelector("input[name='degree-title']").value = sanitizeInput(edu.Degree || "");
+                section.querySelector("input[name='school']").value = sanitizeInput(edu.School || "");
+                section.querySelector("input[name='dates']").value = sanitizeInput(edu.Dates || "");
+                section.querySelector("input[name='location']").value = sanitizeInput(edu.Location || "");
+                section.querySelector("textarea[name='description']").value = sanitizeInput(edu.Honors || "");
+            }
         }
 
         // Add additional education entries
@@ -171,11 +175,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // Populate existing experience fields
         if (experienceList[0]) {
             const exp = experienceList[0];
-            document.querySelector("#work-experience input[name='company']").value = sanitizeInput(exp.Company || "");
-            document.querySelector("#work-experience input[name='title']").value = sanitizeInput(exp.Title || "");
-            document.querySelector("#work-experience input[name='dates']").value = sanitizeInput(exp.Dates || "");
-            document.querySelector("#work-experience input[name='location']").value = sanitizeInput(exp.Location || "");
-            document.querySelector("#work-experience textarea[name='details']").value = sanitizeInput(exp.Details?.join("\n") || "");
+            const section = document.querySelector("#work-experience .experience-item");
+            if (section) {
+                section.querySelector("input[name='company']").value = sanitizeInput(exp.Company || "");
+                section.querySelector("input[name='title']").value = sanitizeInput(exp.Title || "");
+                section.querySelector("input[name='dates']").value = sanitizeInput(exp.Dates || "");
+                section.querySelector("input[name='location']").value = sanitizeInput(exp.Location || "");
+                section.querySelector("textarea[name='details']").value = sanitizeInput(exp.Details?.join("\n") || "");
+            }
         }
 
         // Add additional experience entries
@@ -196,8 +203,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Populate existing certificate fields
         if (certificates[0]) {
             const cert = certificates[0];
-            document.querySelector("#certificates input[name='certificate-name']").value = sanitizeInput(cert.Name || "");
-            document.querySelector("#certificates input[name='year']").value = sanitizeInput(cert.Year || "");
+            const section = document.querySelector("#certificates .certificate-form");
+            if (section) {
+                section.querySelector("input[name='certificate-name']").value = sanitizeInput(cert.Name || "");
+                section.querySelector("input[name='year']").value = sanitizeInput(cert.Year || "");
+            }
         }
 
         // Add additional certificate entries
@@ -206,68 +216,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Function to populate Achievements (if you have a section for it)
+    // Function to populate Achievements (if applicable)
     function populateAchievements(achievements) {
         // Implement similar to certificates or experience sections
-    }
-
-    // Event Handlers
-    logoutLink.addEventListener("click", handleLogout);
-
-    selectResumeButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-            const resumeOption = e.target.closest(".resume-option");
-            if (!resumeOption) return;
-
-            const format = resumeOption.dataset.format;
-            selectedTemplate = format;
-
-            // Store selected template in localStorage
-            localStorage.setItem("selectedTemplate", selectedTemplate);
-
-            if (userState) {
-                populateFormFields(userState);
-                resumeSelection.style.display = "none";
-                profileFormSection.style.display = "flex"; // Changed to flex for layout consistency
-
-                // Update heading text
-                mainHeading.textContent = "Let's make sure this is right, cool?";
-
-                // Initialize the first form section as active
-                showSection(0);
-            } else {
-                alert("Failed to load user data. Please try again.");
-            }
-        });
-    });
-
-    saveFinishButton.addEventListener("click", handleSaveAndFinish);
-
-    sidebarItems.forEach((item, index) => {
-        item.addEventListener("click", (e) => {
-            e.preventDefault();
-            showSection(index);
-        });
-    });
-
-    nextButtons.forEach((button, index) => {
-        button.addEventListener("click", () => {
-            if (index < formSections.length - 1) {
-                showSection(index + 1);
-            }
-        });
-    });
-
-    // Navigation Function
-    function showSection(index) {
-        formSections.forEach((section, i) => {
-            section.classList.toggle("active", i === index);
-            section.style.display = i === index ? "block" : "none";
-        });
-        sidebarItems.forEach((item, i) => {
-            item.classList.toggle("active", i === index);
-        });
-        currentSectionIndex = index;
+        // This requires corresponding HTML structure in dashboard.html
     }
 
     // Logout Function
@@ -282,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Save and Finish Function
-    async function handleSaveAndFinish() {
+    function handleSaveAndFinish() {
         const userData = gatherFormData();
         console.log("Final User Data:", userData);
 
@@ -297,22 +249,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 firstName: document.getElementById("first-name").value,
                 lastName: document.getElementById("last-name").value,
                 professionalSummary: document.getElementById("summary")?.value || "",
-                location: document.getElementById("personal-location")?.value || "",
+            },
+            contactDetails: {
+                phone: document.getElementById("phone").value,
+                email: document.getElementById("email").value,
+                address: document.getElementById("personal-location").value,
             },
             education: gatherSectionData(".education-item"),
             workExperience: gatherSectionData(".experience-item"),
             skills: gatherSkills(),
             certificates: gatherSectionData(".certificate-form", (cert) => ({
-                "Certificate Title": cert.querySelector('input[type="text"]:nth-child(1)').value,
-                "Issuing Organization": cert.querySelector('input[type="text"]:nth-child(2)').value,
-                "Date of Issue": cert.querySelector('input[type="month"]:nth-child(3)').value,
-                "Expiration Date": cert.querySelector('input[type="month"]:nth-child(4)').value,
-                "Description": cert.querySelector('textarea').value,
+                certificateName: cert.querySelector('input[name="certificate-name"]').value,
+                year: cert.querySelector('input[name="year"]').value,
             })),
             links: gatherSectionData(".link-form", (link) => ({
-                "Link Type": link.querySelector('select').value,
-                "Link URL": link.querySelector('input[type="url"]').value,
+                linkUrl: link.querySelector('input[name="link-url"]').value,
             })),
+            // Add achievements if applicable
         };
     }
 
@@ -325,10 +278,29 @@ document.addEventListener("DOMContentLoaded", () => {
         return skills;
     }
 
-    function gatherSectionData(selector, customMapper = (el) => el) {
+    function gatherSectionData(selector, customMapper = (el) => {
+        const obj = {};
+        const inputs = el.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            obj[input.name] = input.value;
+        });
+        return obj;
+    }) {
         return Array.from(document.querySelectorAll(selector)).map((el) => {
             return customMapper(el);
         });
+    }
+
+    // Show Specific Section
+    function showSection(index) {
+        formSections.forEach((section, i) => {
+            section.classList.toggle("active", i === index);
+            section.style.display = i === index ? "block" : "none";
+        });
+        sidebarItems.forEach((item, i) => {
+            item.classList.toggle("active", i === index);
+        });
+        currentSectionIndex = index;
     }
 
     // Skills Section Event Listeners
@@ -371,31 +343,26 @@ document.addEventListener("DOMContentLoaded", () => {
         skillsTagsContainer.appendChild(tag);
     }
 
-    // Document Body Click Event Listener for Dynamic Elements
-    document.body.addEventListener("click", async (event) => {
+    // Event delegation for dynamic elements
+    document.body.addEventListener("click", (event) => {
         const target = event.target;
 
-        // Add new education entry
         if (target.classList.contains("add-education-btn")) {
             addEducationSection();
         }
 
-        // Add new work experience entry
         if (target.classList.contains("add-experience-btn")) {
             addExperienceSection();
         }
 
-        // Add new link entry
         if (target.classList.contains("add-link-btn")) {
             addLinkSection();
         }
 
-        // Add new certificate entry
         if (target.classList.contains("add-certificate-btn")) {
             addCertificateSection();
         }
 
-        // Delete entry
         if (target.classList.contains("delete-btn")) {
             const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
             if (parentEntry) {
@@ -403,24 +370,17 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Toggle Save/Edit on each section
         if (target.classList.contains("save-btn")) {
             const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
             if (parentEntry) {
                 const inputs = parentEntry.querySelectorAll("input, textarea, select");
-                const isDisabled = Array.from(inputs).some(input => input.disabled);
+                const isDisabled = inputs[0].disabled;
 
                 if (isDisabled) {
-                    // Currently in 'view' mode -> Switch to 'edit' mode
-                    inputs.forEach((input) => {
-                        input.removeAttribute("disabled");
-                    });
+                    inputs.forEach((input) => input.disabled = false);
                     target.textContent = "Save";
                 } else {
-                    // Currently in 'edit' mode -> Switch to 'view' mode
-                    inputs.forEach((input) => {
-                        input.setAttribute("disabled", true);
-                    });
+                    inputs.forEach((input) => input.disabled = true);
                     target.textContent = "Edit";
                 }
             }
@@ -529,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="form-grid">
                 <div>
                     <label>Link URL:</label>
-                    <input type="url" value="${sanitizeInput(link || "")}" disabled />
+                    <input type="url" name="link-url" value="${sanitizeInput(link["Link URL"] || "")}" disabled />
                 </div>
             </div>
             <div class="form-actions">
@@ -569,82 +529,9 @@ document.addEventListener("DOMContentLoaded", () => {
         certificateContainer.appendChild(newForm);
     }
 
-    // Function to Sanitize Input to Prevent XSS
+    // Function to Sanitize Input
     function sanitizeInput(str) {
         if (typeof str !== "string") return "";
         return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
-
-    // Event delegation for dynamic elements
-    document.body.addEventListener("click", (event) => {
-        const target = event.target;
-
-        if (target.classList.contains("add-education-btn")) {
-            addEducationSection();
-        }
-
-        if (target.classList.contains("add-experience-btn")) {
-            addExperienceSection();
-        }
-
-        if (target.classList.contains("add-link-btn")) {
-            addLinkSection();
-        }
-
-        if (target.classList.contains("add-certificate-btn")) {
-            addCertificateSection();
-        }
-
-        if (target.classList.contains("delete-btn")) {
-            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
-            if (parentEntry) {
-                parentEntry.remove();
-            }
-        }
-
-        if (target.classList.contains("save-btn")) {
-            const parentEntry = target.closest(".education-item, .experience-item, .certificate-form, .link-form");
-            if (parentEntry) {
-                const inputs = parentEntry.querySelectorAll("input, textarea, select");
-                const isDisabled = inputs[0].disabled;
-
-                if (isDisabled) {
-                    inputs.forEach((input) => input.disabled = false);
-                    target.textContent = "Save";
-                } else {
-                    inputs.forEach((input) => input.disabled = true);
-                    target.textContent = "Edit";
-                }
-            }
-        }
-    });
-
-    // Function to Show Specific Section
-    function showSection(index) {
-        formSections.forEach((section, i) => {
-            section.classList.toggle("active", i === index);
-            section.style.display = i === index ? "block" : "none";
-        });
-        sidebarItems.forEach((item, i) => {
-            item.classList.toggle("active", i === index);
-        });
-        currentSectionIndex = index;
-    }
-
-    // Initialize Skills Tags Container
-    if (!skillsTagsContainer) {
-        console.error("Element with class 'skills-tags' not found. Please ensure it exists in the HTML.");
-    }
-
-    // Skills Section Event Listeners
-    if (newSkillInput) {
-        newSkillInput.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" && newSkillInput.value.trim() !== "") {
-                event.preventDefault();
-                addSkillTag(newSkillInput.value.trim());
-                newSkillInput.value = "";
-            }
-        });
-    }
-
 });
