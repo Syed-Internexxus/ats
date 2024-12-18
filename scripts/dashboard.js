@@ -1,7 +1,4 @@
-// JavaScript code for dashboard functionality
-
 document.addEventListener("DOMContentLoaded", () => {
-    // Variables
     let userState = null;
     let selectedTemplate = null;
     let currentSectionIndex = 0;
@@ -14,18 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const saveFinishButton = document.querySelector(".save-button");
     const mainHeading = document.querySelector(".profile-form h1");
 
-    // Sidebar Navigation
     const sidebarItems = document.querySelectorAll(".sidebar-item");
     const formSections = document.querySelectorAll(".form-section");
-
-    // Next Buttons
     const nextButtons = document.querySelectorAll(".next-button");
-
-    // Skills Tags Container
     const skillsTagsContainer = document.querySelector(".skills-tags");
     const newSkillInput = document.getElementById("new-skill");
 
-    // Load User State from LocalStorage
+    // Load User Data from LocalStorage
     try {
         const data = localStorage.getItem("dashboardData");
         if (data) {
@@ -40,112 +32,210 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Populate Form Fields
-    function populateData(userState) {
-        document.getElementById("firstName").value = userState["First Name"] || "";
-        document.getElementById("lastName").value = userState["Last Name"] || "";
-        document.getElementById("title").value = userState["Title"] || "";
-        document.getElementById("contact").value = userState["Contact"] || "";
+    function populateFormFields(data) {
+        document.getElementById("first-name").value = data["First Name"] || "";
+        document.getElementById("last-name").value = data["Last Name"] || "";
+        document.getElementById("summary").value = data["Professional Summary"] || "";
+        document.getElementById("personal-location").value = data["Location"] || "";
 
-        populateDynamicSection("#linksContainer", userState.Links || [], "link-form", `
-            <div class="link-form">
-                <input type="url" value="{{link}}" class="form-control" placeholder="Link" disabled />
-                <button class="delete-btn">Delete</button>
-            </div>
-        `);
+        populateDynamicSection(".additional-education-container", data.Education || [], getEducationHTML);
+        populateDynamicSection(".additional-experience-container", data.Experience || [], getExperienceHTML);
+        populateDynamicSection(".additional-link-container", data.Links || [], getLinkHTML);
+        populateDynamicSection(".additional-certificate-container", data.Certificates || [], getCertificateHTML);
+    }
 
-        populateDynamicSection("#educationContainer", userState.Education || [], "education-item", `
+    // Helper Functions for Generating HTML Templates
+    function getEducationHTML(item = {}) {
+        return `
             <div class="education-item">
-                <input type="text" value="{{School}}" placeholder="School" class="form-control" disabled />
-                <input type="text" value="{{Degree}}" placeholder="Degree" class="form-control" disabled />
-                <input type="text" value="{{Location}}" placeholder="Location" class="form-control" disabled />
-                <input type="text" value="{{Dates}}" placeholder="Dates" class="form-control" disabled />
-                <button class="delete-btn">Delete</button>
-            </div>
-        `);
+                <div class="form-grid">
+                    <div>
+                        <label>Degree Title:</label>
+                        <input type="text" value="${sanitizeInput(item.title || "")}" disabled />
+                    </div>
+                    <div>
+                        <label>University:</label>
+                        <input type="text" value="${sanitizeInput(item.university || "")}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label>Date of Issue:</label>
+                        <input type="month" value="${sanitizeInput(item.start || "")}" disabled />
+                    </div>
+                    <div>
+                        <label>Expiration Date:</label>
+                        <input type="month" value="${sanitizeInput(item.end || "")}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid full-width">
+                    <label>Description:</label>
+                    <textarea disabled>${sanitizeInput(item.description || "")}</textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
+            </div>`;
+    }
 
-        populateDynamicSection("#experienceContainer", userState.Experience || [], "experience-item", `
+    function getExperienceHTML(item = {}) {
+        return `
             <div class="experience-item">
-                <input type="text" value="{{Company}}" placeholder="Company" class="form-control" disabled />
-                <input type="text" value="{{Title}}" placeholder="Title" class="form-control" disabled />
-                <textarea placeholder="Details" class="form-control" disabled>{{Details}}</textarea>
-                <button class="delete-btn">Delete</button>
-            </div>
-        `);
+                <div class="form-grid">
+                    <div>
+                        <label>Company:</label>
+                        <input type="text" value="${sanitizeInput(item.company || "")}" disabled />
+                    </div>
+                    <div>
+                        <label>Title:</label>
+                        <input type="text" value="${sanitizeInput(item.title || "")}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label>Start:</label>
+                        <input type="month" value="${sanitizeInput(item.start || "")}" disabled />
+                    </div>
+                    <div>
+                        <label>End:</label>
+                        <input type="month" value="${sanitizeInput(item.end || "")}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid full-width">
+                    <label>Description:</label>
+                    <textarea disabled>${sanitizeInput(item.description || "")}</textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
+            </div>`;
+    }
 
-        populateDynamicSection("#certificatesContainer", userState.Certificates || [], "certificate-form", `
+    function getLinkHTML(item = {}) {
+        return `
+            <div class="link-form">
+                <div class="form-grid">
+                    <div>
+                        <label>Link Type:</label>
+                        <select disabled>
+                            <option value="${sanitizeInput(item.type || "")}" selected>${sanitizeInput(item.type || "")}</option>
+                            <option value="Portfolio">Portfolio</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                            <option value="GitHub">GitHub</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Link URL:</label>
+                        <input type="url" value="${sanitizeInput(item.url || "")}" disabled />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
+            </div>`;
+    }
+
+    function getCertificateHTML(item = {}) {
+        return `
             <div class="certificate-form">
-                <input type="text" value="{{Name}}" placeholder="Certificate Name" class="form-control" disabled />
-                <input type="text" value="{{Year}}" placeholder="Year" class="form-control" disabled />
-                <button class="delete-btn">Delete</button>
-            </div>
-        `);
+                <div class="form-grid">
+                    <div>
+                        <label>Certificate Title:</label>
+                        <input type="text" value="${sanitizeInput(item.title || "")}" disabled />
+                    </div>
+                    <div>
+                        <label>Issuing Organization:</label>
+                        <input type="text" value="${sanitizeInput(item.organization || "")}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label>Date of Issue:</label>
+                        <input type="month" value="${sanitizeInput(item.issue || "")}" disabled />
+                    </div>
+                    <div>
+                        <label>Expiration Date:</label>
+                        <input type="month" value="${sanitizeInput(item.expiry || "")}" disabled />
+                    </div>
+                </div>
+                <div class="form-grid full-width">
+                    <label>Description:</label>
+                    <textarea disabled>${sanitizeInput(item.description || "")}</textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="delete-btn">Delete</button>
+                    <button class="save-btn">Edit</button>
+                </div>
+            </div>`;
     }
 
-    function populateDynamicSection(selector, items, className, template) {
-        const container = document.querySelector(selector);
-        container.innerHTML = "";
-        items.forEach((item) => {
+    function sanitizeInput(value) {
+        return value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function populateDynamicSection(containerSelector, data, templateFunction) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+
+        container.innerHTML = ""; // Clear existing content
+        data.forEach((item) => {
+            const html = templateFunction(item);
             const div = document.createElement("div");
-            div.className = className;
-            let content = template;
-            for (const key in item) {
-                content = content.replace(new RegExp(`{{${key}}}`, "g"), sanitizeInput(item[key] || ""));
-            }
-            div.innerHTML = content;
-            container.appendChild(div);
+            div.innerHTML = html;
+            container.appendChild(div.firstChild);
         });
     }
 
-    function sanitizeInput(str) {
-        if (typeof str !== "string") return "";
-        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    // Resume Selection Logic
-    selectResumeButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-            const resumeOption = e.target.closest(".resume-option");
-            if (!resumeOption) return;
-
-            selectedTemplate = resumeOption.dataset.format;
-            localStorage.setItem("selectedTemplate", selectedTemplate);
-
-            if (userState) {
-                populateData(userState);
-                resumeSelection.style.display = "none";
-                profileFormSection.style.display = "flex";
-
-                mainHeading.textContent = "Let's make sure this is right, shall we?";
-                showSection(0);
-            } else {
-                alert("Failed to load user data. Please try again.");
-            }
-        });
-    });
-
-    // Handle Save/Edit and Delete Events
+    // Event Delegation for Dynamic Buttons
     document.body.addEventListener("click", (event) => {
         const target = event.target;
 
+        if (target.classList.contains("add-education-btn")) {
+            addSection(".additional-education-container", getEducationHTML());
+        }
+        if (target.classList.contains("add-experience-btn")) {
+            addSection(".additional-experience-container", getExperienceHTML());
+        }
+        if (target.classList.contains("add-link-btn")) {
+            addSection(".additional-link-container", getLinkHTML());
+        }
+        if (target.classList.contains("add-certificate-btn")) {
+            addSection(".additional-certificate-container", getCertificateHTML());
+        }
         if (target.classList.contains("delete-btn")) {
-            target.parentElement.remove();
-        } else if (target.classList.contains("save-btn")) {
-            const container = target.closest(".form-section");
-            const inputs = container.querySelectorAll("input, textarea");
-            const isDisabled = inputs[0].disabled;
-            inputs.forEach((input) => (input.disabled = !isDisabled));
-            target.textContent = isDisabled ? "Save" : "Edit";
+            target.closest(".education-item, .experience-item, .link-form, .certificate-form").remove();
+        }
+        if (target.classList.contains("save-btn")) {
+            toggleEdit(target);
         }
     });
 
-    // Sidebar Navigation
-    sidebarItems.forEach((item, index) => {
-        item.addEventListener("click", () => showSection(index));
-    });
+    function addSection(containerSelector, html) {
+        const container = document.querySelector(containerSelector);
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        container.appendChild(div.firstChild);
+    }
 
+    function toggleEdit(button) {
+        const parent = button.closest(".education-item, .experience-item, .link-form, .certificate-form");
+        const inputs = parent.querySelectorAll("input, textarea, select");
+        const isDisabled = inputs[0].disabled;
+
+        inputs.forEach((input) => {
+            input.disabled = !isDisabled;
+        });
+        button.textContent = isDisabled ? "Save" : "Edit";
+    }
+
+    // Navigation and Form Saving Logic...
     function showSection(index) {
         formSections.forEach((section, i) => {
-            section.classList.toggle("active", i === index);
+            section.style.display = i === index ? "block" : "none";
         });
         sidebarItems.forEach((item, i) => {
             item.classList.toggle("active", i === index);
@@ -153,49 +243,34 @@ document.addEventListener("DOMContentLoaded", () => {
         currentSectionIndex = index;
     }
 
-    // Save and Finish Functionality
-    saveFinishButton.addEventListener("click", () => {
-        const userData = gatherFormData();
-        console.log("Final User Data:", userData);
-        alert("Save and Finish functionality under development.");
-    });
-
-    function gatherFormData() {
-        return {
-            personalDetails: {
-                firstName: document.getElementById("firstName").value,
-                lastName: document.getElementById("lastName").value,
-                title: document.getElementById("title").value,
-                contact: document.getElementById("contact").value,
-            },
-            links: gatherDynamicData(".link-form"),
-            education: gatherDynamicData(".education-item"),
-            experience: gatherDynamicData(".experience-item"),
-            certificates: gatherDynamicData(".certificate-form"),
-        };
-    }
-
-    function gatherDynamicData(selector) {
-        const elements = document.querySelectorAll(selector);
-        return Array.from(elements).map((el) => {
-            const inputs = el.querySelectorAll("input, textarea");
-            const data = {};
-            inputs.forEach((input) => {
-                data[input.placeholder] = input.value;
-            });
-            return data;
+    if (newSkillInput) {
+        newSkillInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && newSkillInput.value.trim() !== "") {
+                event.preventDefault();
+                addSkillTag(newSkillInput.value.trim());
+                newSkillInput.value = "";
+            }
         });
     }
 
-    // Initialize Form
-    if (userState) {
-        populateData(dashboardData);
+    function addSkillTag(skill) {
+        const tag = document.createElement("span");
+        tag.classList.add("skill-tag");
+        tag.textContent = skill;
+
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "×";
+        removeButton.classList.add("remove-skill");
+        removeButton.addEventListener("click", () => {
+            skillsTagsContainer.removeChild(tag);
+        });
+
+        tag.appendChild(removeButton);
+        skillsTagsContainer.appendChild(tag);
     }
 
-    // Logout Functionality
     logoutLink.addEventListener("click", () => {
-        localStorage.removeItem("dashboardData");
-        alert("Logged out successfully.");
+        localStorage.clear();
         window.location.href = "index.html";
     });
 });
