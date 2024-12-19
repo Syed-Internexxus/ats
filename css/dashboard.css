@@ -97,11 +97,13 @@ body {
   transition: opacity 0.5s ease;
 }
 
-.loader-gif {
+/* Updated from .loader-gif to .loader-video */
+.loader-video {
   width: 200px;
   height: 200px;
+  /* Optional: Maintain aspect ratio */
+  object-fit: contain;
 }
-
 
 @media (max-width: 480px) {
   .navbar {
@@ -114,7 +116,14 @@ body {
     flex-direction: column;
     gap: 0.5rem;
   }
+
+  /* Adjust loader video size for smaller screens */
+  .loader-video {
+    width: 150px;
+    height: 150px;
+  }
 }
+
 /* Footer */
 .footer {
   text-align: center;
