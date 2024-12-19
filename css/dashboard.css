@@ -81,6 +81,7 @@ body {
   background-color: #0056b3;
 }
 
+
 /* Loader */
 #loader {
   position: fixed;
@@ -104,6 +105,20 @@ body {
   object-fit: contain;
   margin: auto;
   display: block;
+}
+
+/* Profile Form Styling */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.profile-form h1 {
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
 @media (max-width: 480px) {
