@@ -106,7 +106,7 @@ body {
   margin: auto;
   justify-content: center;
   align-items: center;
-  display: block;
+  display: flex;
 }
 
 /* Profile Form Styling */
