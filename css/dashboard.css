@@ -52,7 +52,7 @@ body {
   padding: 1rem;
   background-color: #fff;
   transition: box-shadow 0.3s ease;
-  max-width: 320px; /* Ensure options don't exceed container */
+  max-width: 500px; /* Ensure options don't exceed container */
   flex: 1 1 300px; /* Flex properties for responsiveness */
 }
 
