@@ -62,7 +62,7 @@ body {
 
 .resume-thumbnail img {
   width: 100%;
-  max-width: 700px;
+  max-width: 500px;
   height: auto;
   margin-bottom: 1rem;
 }
@@ -83,17 +83,24 @@ body {
 
 #loader {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: auto; /* Adjust as needed for the loader size */
-  height: auto; /* Adjust as needed for the loader size */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
   background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 9999; /* Ensure it's above all other content */
+  pointer-events: all; /* Ensure no interactions with underlying content */
 }
+
+.loader-video {
+  width: 200px; /* Adjust size as needed */
+  height: 200px;
+  object-fit: contain;
+}
+
 
 
 /* Profile Form Styling */
