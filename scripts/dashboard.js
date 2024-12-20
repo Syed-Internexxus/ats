@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         // Show loader
-        loader.style.display = "block";
+        loader.style.display = "none";
 
         // Create the payload using userState
         const payload = {
