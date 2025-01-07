@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     template2Button.addEventListener("click", (e) => {
         e.preventDefault();
-        handleTemplateSelection("template");
+        handleTemplateSelection("template1");
     });
 
     // Handle Template Selection
