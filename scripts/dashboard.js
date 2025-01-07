@@ -5,21 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // DOM Elements
     const logoutLink = document.getElementById("logout-link");
     const loader = document.getElementById("loader");
-    const template1Button = document.getElementById("template1");
-    const template2Button = document.getElementById("template");
-
+    const template1Button = document.getElementById("template1"); 
+    const template2Button = document.getElementById("template2"); 
+    
     // Ensure necessary elements exist
     if (!logoutLink || !loader || !template1Button || !template2Button) {
         console.error("Some required DOM elements are missing.");
         return;
     }
-
+    
     // Load User State from LocalStorage
     try {
         const data = localStorage.getItem("dashboardData");
         if (data) {
             userState = JSON.parse(data);
-
+    
             // Check for session expiration
             if (userState?.statusCode === 500) {
                 localStorage.removeItem("dashboardData");
@@ -36,21 +36,21 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "upload.html";
         return;
     }
-
+    
     // Event Listener for Logout
     logoutLink.addEventListener("click", handleLogout);
-
+    
     // Add Event Listeners for Template Buttons
     template1Button.addEventListener("click", (e) => {
         e.preventDefault();
-        handleTemplateSelection("template");
+        handleTemplateSelection("template1"); // Pass "template1" for template1Button
     });
-
+    
     template2Button.addEventListener("click", (e) => {
         e.preventDefault();
-        handleTemplateSelection("template1");
+        handleTemplateSelection("template2"); // Pass "template2" for template2Button
     });
-
+    
     // Handle Template Selection
     function handleTemplateSelection(template) {
         if (!userState) {
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         // Show loader
         loader.style.display = "flex";
-
+    
         // Create the payload using userState
         const payload = {
             base64_url: userState.base64_file, // Accessing base64-encoded PDF
