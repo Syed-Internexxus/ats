@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .finally(() => {
                 // Always hide the loader
-                #loader.style.display = "none";
+                loader.style.display = "none";
             });
     }
 
