@@ -136,12 +136,21 @@ body {
   }
 }
 
-/* Footer */
 .footer {
+  position: relative;
+  padding: 20px;
   text-align: center;
-  padding: 1rem 0;
-  background: #ffffff;
-  font-size: 0.9rem;
+}
+
+.footer .feedback-icon {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
   color: #666;
-  margin-top: 2rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer .feedback-icon:hover {
+  color: #000;
 }
