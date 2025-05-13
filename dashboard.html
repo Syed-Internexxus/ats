@@ -1,77 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Form - Enter Details</title>
-    <link rel="stylesheet" href="css/dashboard.css">
-    <!-- Font Awesome for feedback icon -->
-    <link 
-      rel="stylesheet" 
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-      integrity="sha512-papXzJ5V+0ox+zLCW5pJF+WICYtZ5MWIuSpOSl5QkMXZiL6WhUvQ+GjIYRiqJNTVmezxtc2t3FNIEnF3zYdYKg==" 
-      crossorigin="anonymous" 
-      referrerpolicy="no-referrer" 
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Form - Enter Details</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <!-- Font Awesome for feedback icon -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+    integrity="sha512-papXzJ5V+0ox+zLCW5pJF+WICYtZ5MWIuSpOSl5QkMXZiL6WhUvQ+GjIYRiqJNTVmezxtc2t3FNIEnF3zYdYKg==" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer" 
+  />
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" 
+    rel="stylesheet"
+  >
+
+  <!-- Feedback Button Styles -->
+  <style>
+    .feedback-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #0069d9, #0056b3);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      z-index: 1000;
+      text-decoration: none;
+    }
+    .feedback-btn i {
+      margin-right: 8px;
+      font-size: 1.2rem;
+    }
+    .feedback-btn:hover {
+      background: linear-gradient(135deg, #0056b3, #004494);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+    .feedback-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
 <body>
-    <!-- Loader -->
-    <div class="loader" id="loader" style="display: none;">
-        <video autoplay loop muted playsinline class="loader-video">
-            <source src="assets/loader.webm" type="video/webm">
-            Your browser does not support the video tag.
-        </video>
-    </div> 
-    <header class="navbar">
-        <div class="logo">
-            <a href="index.html">
-                <img src="assets/logo.png" alt="Internexxus Logo">
-            </a>
+  <!-- Loader -->
+  <div class="loader" id="loader" style="display: none;">
+    <video autoplay loop muted playsinline class="loader-video">
+      <source src="assets/loader.webm" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
+  </div> 
+
+  <header class="navbar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="assets/logo.png" alt="Internexxus Logo">
+      </a>
+    </div>
+    <nav>
+      <a href="https://internexxus.com/resume-analyzer/">All Tools</a>
+      <a href="https://internexxus.com/">Dashboard</a>
+      <a href="#" id="logout-link">Logout</a>
+    </nav>
+  </header>
+
+  <main class="profile-form">
+    <h1>Choose Your Resume Format</h1>
+    <!-- Resume Selection Section -->
+    <section id="resume-selection" class="resume-selection">
+      <div class="resume-option">
+        <div class="resume-thumbnail">
+          <img src="resumes/resume_1.png" alt="Resume Format 1">
         </div>
-        <nav>
-            <a href="https://internexxus.com/resume-analyzer/">All Tools</a>
-            <a href="https://internexxus.com/">Dashboard</a>
-            <a href="#" id="logout-link">Logout</a>
-        </nav>
-    </header>
+        <button id="template1" class="select-resume-btn">Select Template 1</button>
+      </div>
+      <div class="resume-option">
+        <div class="resume-thumbnail">
+          <img src="resumes/resume_2.png" alt="Resume Format 2">
+        </div>
+        <button id="template2" class="select-resume-btn">Select Template 2</button>
+      </div>
+    </section>
+  </main>
 
-    <main class="profile-form">
-        <h1>Choose Your Resume Format</h1>
-        <!-- Resume Selection Section -->
-        <section id="resume-selection" class="resume-selection">
-            <div class="resume-option">
-                <div class="resume-thumbnail">
-                    <img src="resumes/resume_1.png" alt="Resume Format 1">
-                </div>
-                <button id="template1" class="select-resume-btn">Select Template 1</button>
-            </div>
-            <div class="resume-option">
-                <div class="resume-thumbnail">
-                    <img src="resumes/resume_2.png" alt="Resume Format 2">
-                </div>
-                <button id="template2" class="select-resume-btn">Select Template 2</button>
-            </div>
-        </section>
-    </main>
+  <footer class="footer">
+    <p>Privacy Policy | Terms of Service | Cookies Policy</p>
+    <p>&copy; 2024 Internexxus. All rights reserved.</p>
+  </footer>
 
-    <footer class="footer">
-        <p>Privacy Policy | Terms of Service | Cookies Policy</p>
-        <p>&copy; 2024 Internexxus. All rights reserved.</p>
-        <!-- Feedback Icon Link -->
-        <a 
-          href="https://docs.google.com/forms/d/e/1FAIpQLScNasBW9L3uEO9pOjVAXyN4fcIefJpOOXflB4k_CsaXCo9zAw/viewform?usp=sharing" 
-          target="_blank" 
-          class="feedback-icon" 
-          title="Give Feedback"
-        >
-          <i class="fas fa-question-circle fa-2x"></i>
-        </a>
-    </footer>
+  <!-- Floating Feedback Button -->
+  <a
+    href="https://docs.google.com/forms/d/e/1FAIpQLScNasBW9L3uEO9pOjVAXyN4fcIefJpOOXflB4k_CsaXCo9zAw/viewform?usp=sharing"
+    class="feedback-btn"
+    target="_blank"
+    rel="noopener"
+    aria-label="Give feedback"
+  >
+    <i class="fa-solid fa-comment-dots"></i>
+    Feedback
+  </a>
 
-    <!-- Script Placement -->
-    <script src="scripts/dashboard.js"></script>
+  <!-- Script Placement -->
+  <script src="scripts/dashboard.js"></script>
 </body>
 </html>
